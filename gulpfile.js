@@ -28,7 +28,7 @@ var reload = browserSync.reload;
 // =================================
 
 var jsSrc = 'src/js/**/*.js';
-var sassSrc = 'src/sass/**/*.sass';
+var sassSrc = 'src/sass/**/*.scss';
 
 
 gulp.task('sass', function() {
@@ -81,7 +81,7 @@ gulp.task('default', [], function() {
         ],
 
         // 启动端口
-        port: 6666,
+        port: 6888,
 
         // 动态根路径
         server: {
