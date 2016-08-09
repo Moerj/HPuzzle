@@ -4,6 +4,7 @@
 
 .puzzle{
     >.fragment{
+        transition: 0.3s ease;
         cursor:pointer;
         &:hover{
             box-shadow: 0 0 10px 0 rgba($color: black, $alpha: 0.3);

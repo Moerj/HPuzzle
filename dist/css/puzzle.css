@@ -3,6 +3,8 @@
  * 拼图核心样式
  */
 .puzzle > .fragment {
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
   cursor: pointer; }
   .puzzle > .fragment:hover {
     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);

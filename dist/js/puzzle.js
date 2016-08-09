@@ -29,10 +29,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             // 拼图行数
             this.row = opts.level + 2;
 
-            // 拼图分片数
+            // 拼图碎片数
             this.fragment = this.row * this.row;
 
-            // 分片的定位数组
+            // 碎片的定位数组
             this.positionArry = [];
         }
 
@@ -42,6 +42,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var Range = Max - Min;
                 var Rand = Math.random();
                 return Min + Math.round(Rand * Range);
+            }
+        }, {
+            key: '_getSideDoms',
+            value: function _getSideDoms(dom) {
+                var top = parseInt(dom.style.top);
+                var left = parseInt(dom.style.left);
+                var h = dom.offsetHeight;
+                var w = dom.offsetWidth;
+                var items = this.items;
+
+                // 上下左右相邻的碎片
+                var side = {
+                    top: { top: top - h, left: left },
+                    bottom: { top: top + h, left: left },
+                    left: { top: top, left: left - w },
+                    right: { top: top, left: left + w }
+                };
+
+                var sideDoms = {};
+                var keys = ['top', 'left', 'bottom', 'right'];
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    for (var j = 0; j < keys.length; j++) {
+                        var key = keys[j];
+                        if (parseInt(item.style['top']) == side[key]['top'] && parseInt(item.style['left']) == side[key]['left']) {
+                            sideDoms[key] = item;
+                        }
+                    }
+                }
+
+                return sideDoms;
             }
         }, {
             key: 'create',
@@ -96,12 +127,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 this.puzzle = $(puzzleString);
 
+                // 记录所有碎片
+                this.items = this.puzzle.children();
+
                 // 给碎片dom 加上序号
-                this.puzzle.children().each(function (index, item) {
+                this.items.each(function (index, item) {
                     item._puzzleIndex = index;
 
-                    // 记录每个分片当前位置的定位
+                    // 记录每个碎片当前位置的定位
                     _this.positionArry[index] = { left: item.style.left, top: item.style.top };
+                });
+
+                // 每个碎片点击事件
+                $(this.puzzle).on('click', '.fragment', function (e) {
+                    _this.render(e.target);
+                    return false;
                 });
 
                 this.opts.contanier.append(this.puzzle);
@@ -113,10 +153,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             value: function random() {
                 //随机排序拼图碎片
                 // 建立一个新的数组，它存放所有拼图碎片
-                var fragmentDoms = this.puzzle.children();
                 var arr = [];
-                for (var i = 0; i < fragmentDoms.length; i++) {
-                    arr.push(fragmentDoms[i]);
+                for (var i = 0; i < this.items.length; i++) {
+                    arr.push(this.items[i]);
                 }
 
                 // 从新数组中随机抽取碎片
@@ -136,8 +175,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }
         }, {
             key: 'render',
-            value: function render() {//绘制拼图改变
-
+            value: function render(clickTarget) {
+                //绘制拼图改变
+                var sideDoms = this._getSideDoms(clickTarget);
+                var blank = void 0;
+                var temp = {
+                    top: parseInt(clickTarget.style.top) + 'px',
+                    left: parseInt(clickTarget.style.left) + 'px'
+                };
+                for (var key in sideDoms) {
+                    if (sideDoms[key].className == '') {
+                        // 获取到空白块
+                        blank = sideDoms[key];
+                        // 空白快和点击块交换位置
+                        clickTarget.style.top = blank.style.top;
+                        clickTarget.style.left = blank.style.left;
+                        blank.style.top = temp.top;
+                        blank.style.left = temp.left;
+                        break;
+                    }
+                }
             }
         }]);
 
@@ -145,6 +202,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     }();
 
     window.Puzzle = function (opts) {
-        return new Puzzle(opts);
+        var p = new Puzzle(opts);
+        p.init = function () {
+            p.create().random();
+        };
+        return p;
     };
 })();
