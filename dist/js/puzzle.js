@@ -27,6 +27,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.opts = $.extend({}, DEFAULT, opts);
 
             // 拼图行数
+            if (opts.level < 1) {
+                opts.level = 1;
+            }
+            if (opts.level > 3) {
+                opts.level = 3;
+            }
             this.row = opts.level + 2;
 
             // 拼图碎片数
