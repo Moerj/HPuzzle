@@ -3,7 +3,11 @@
  */
 
 .puzzle{
-    width: 600px;
-    height: 600px;
-
+    >.fragment{
+        cursor:pointer;
+        &:hover{
+            box-shadow: 0 0 10px 0 rgba($color: black, $alpha: 0.3);
+            z-index:1;
+        }
+    }
 }
