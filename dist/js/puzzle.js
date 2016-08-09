@@ -138,9 +138,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     _this.positionArry[index] = { left: item.style.left, top: item.style.top };
                 });
 
+                // 创建点击音效
+                this.clickSound = $('<audio src="sounds/slide.wav" preload></audio>')[0];
+
                 // 每个碎片点击事件
                 $(this.puzzle).on('click', '.fragment', function (e) {
                     _this.render(e.target);
+                    _this.clickSound.play();
                     return false;
                 });
 

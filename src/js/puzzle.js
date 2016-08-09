@@ -137,9 +137,13 @@
 
             })
 
+            // 创建点击音效
+            this.clickSound = $(`<audio src="sounds/slide.wav" preload></audio>`)[0]
+
             // 每个碎片点击事件
             $(this.puzzle).on('click', '.fragment', (e) => {
                 this.render(e.target)
+                this.clickSound.play()
                 return false
             })
 
