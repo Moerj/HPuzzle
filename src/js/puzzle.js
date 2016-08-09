@@ -20,11 +20,11 @@
             this.opts = $.extend({}, DEFAULT, opts);
 
             // 拼图行数
-            if (opts.level<1) {
-                opts.level=1
+            if (opts.level < 1) {
+                opts.level = 1
             }
-            if (opts.level>3) {
-                opts.level=3
+            if (opts.level > 3) {
+                opts.level = 3
             }
             this.row = opts.level + 2;
 
@@ -74,7 +74,7 @@
 
             return sideDoms
         }
-        _isClear(){ //是否通关
+        _isClear() { //是否通关
             for (let i = 0; i < this.items.length; i++) {
                 let item = this.items[i];
                 if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
@@ -83,9 +83,9 @@
             }
             return true
         }
-        congratulations(){ //触发胜利
+        congratulations() { //触发胜利
             this.items.hide()
-            this.puzzle.css({background:`url(${this.opts.imgUrl})`,backgroundSize:'cover'})
+            this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
             this.clearSound.play()
         }
         create() { //创建结构
@@ -97,7 +97,7 @@
             let top = 0
             let left = 0
             let leftIndex = 1
-            let simpleImg = $(`<img src="${this.opts.imgUrl}" width="${this.opts.size}">`)
+            let simpleImg = $(`<img src="${this.opts.imgUrl}">`)
             let simpleImgWidth = simpleImg[0].width
             let simpleImgHeight = simpleImg[0].height
 
@@ -123,11 +123,10 @@
                     className += 'fragment'
                 }
 
-                // 设置每个碎片图片成背景图尺寸，以 simple 最长边为基准
                 if (simpleImgWidth < simpleImgHeight) {
-                    style += `background-size: auto ${this.opts.size}px;`
-                } else {
                     style += `background-size: ${this.opts.size}px auto;`
+                } else {
+                    style += `background-size: auto ${this.opts.size}px;`
                 }
 
                 // 碎片尺寸和位置
@@ -168,10 +167,15 @@
             // 每个碎片点击事件
             $(this.puzzle).on('click', '.fragment', (e) => {
                 let target = e.target
+                let timer = target._puzzleTimer
 
                 // 判断是否通关
-                if(this._isClear()) 
-                    this.congratulations()
+                if (timer) {
+                    clearTimeout(timer)
+                }
+                timer = setTimeout(() => {
+                    if (this._isClear()) this.congratulations()
+                },310)
 
                 // 更新渲染拼图
                 this.render(target)
@@ -219,7 +223,7 @@
                 if (sideDoms[key].className == '') {
                     // 获取到空白块
                     blank = sideDoms[key]
-                    // 空白快和点击块交换位置
+                        // 空白快和点击块交换位置
                     clickTarget.style.top = blank.style.top
                     clickTarget.style.left = blank.style.left
                     blank.style.top = temp.top
@@ -235,7 +239,10 @@
     window.Puzzle = function(opts) {
         let p = new Puzzle(opts)
         p.init = () => {
-            p.create().random()
+            p.create()
+            setTimeout(() => {
+                p.random()
+            })
         }
         return p
     };

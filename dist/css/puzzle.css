@@ -1,6 +1,7 @@
 @charset "UTF-8";
 /**
  * 拼图核心样式
+ * 拼图的 hover 和 css3动画效果
  */
 .puzzle > .fragment {
   -webkit-transition: 0.3s ease;

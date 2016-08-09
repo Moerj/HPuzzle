@@ -121,7 +121,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var top = 0;
                 var left = 0;
                 var leftIndex = 1;
-                var simpleImg = $('<img src="' + this.opts.imgUrl + '" width="' + this.opts.size + '">');
+                var simpleImg = $('<img src="' + this.opts.imgUrl + '">');
                 var simpleImgWidth = simpleImg[0].width;
                 var simpleImgHeight = simpleImg[0].height;
 
@@ -144,11 +144,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         className += 'fragment';
                     }
 
-                    // 设置每个碎片图片成背景图尺寸，以 simple 最长边为基准
                     if (simpleImgWidth < simpleImgHeight) {
-                        style += 'background-size: auto ' + this.opts.size + 'px;';
-                    } else {
                         style += 'background-size: ' + this.opts.size + 'px auto;';
+                    } else {
+                        style += 'background-size: auto ' + this.opts.size + 'px;';
                     }
 
                     // 碎片尺寸和位置
@@ -176,9 +175,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // 每个碎片点击事件
                 $(this.puzzle).on('click', '.fragment', function (e) {
                     var target = e.target;
+                    var timer = target._puzzleTimer;
 
                     // 判断是否通关
-                    if (_this._isClear()) _this.congratulations();
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(function () {
+                        if (_this._isClear()) _this.congratulations();
+                    }, 310);
 
                     // 更新渲染拼图
                     _this.render(target);
@@ -248,7 +253,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     window.Puzzle = function (opts) {
         var p = new Puzzle(opts);
         p.init = function () {
-            p.create().random();
+            p.create();
+            setTimeout(function () {
+                p.random();
+            });
         };
         return p;
     };
