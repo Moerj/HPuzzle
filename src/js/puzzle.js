@@ -33,13 +33,19 @@
 
             // 碎片的定位数组
             this.positionArry = []
+
+            // 点击音效
+            this.clickSound = $(`<audio src="${this.opts.clickSound}" preload></audio>`)[0]
+
+            // 胜利音效
+            this.clearSound = $(`<audio src="${this.opts.clearSound}" preload></audio>`)[0]
         }
         _getRandomNum(Min, Max) {
             let Range = Max - Min;
             let Rand = Math.random();
             return (Min + Math.round(Rand * Range));
         }
-        _getSideDoms(dom) {
+        _getSideDoms(dom) { //获取点击目标的上下左右
             let top = parseInt(dom.style.top)
             let left = parseInt(dom.style.left)
             let h = dom.offsetHeight
@@ -67,6 +73,23 @@
             }
 
             return sideDoms
+        }
+        _isClear(){ //是否通关
+            for (let i = 0; i < this.items.length; i++) {
+                let item = this.items[i];
+                item.style.top=item._puzzleTop
+                item.style.left=item._puzzleLeft
+
+                if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
+                    return false
+                }
+            }
+            return true
+        }
+        congratulations(){ //触发胜利
+            this.items.hide()
+            this.puzzle.css({background:`url(${this.opts.imgUrl})`,backgroundSize:'cover'})
+            this.clearSound.play()
         }
         create() { //创建结构
             //拼图的第一块为空白占位块
@@ -136,19 +159,25 @@
 
             // 给碎片dom 加上序号
             this.items.each((index, item) => {
-                item._puzzleIndex = index;
+                item._puzzleTop = item.style.top;
+                item._puzzleLeft = item.style.left;
+                item._puzzleIndex = index
 
                 // 记录每个碎片当前位置的定位
                 this.positionArry[index] = { left: item.style.left, top: item.style.top }
 
             })
 
-            // 创建点击音效
-            this.clickSound = $(`<audio src="sounds/slide.wav" preload></audio>`)[0]
-
             // 每个碎片点击事件
             $(this.puzzle).on('click', '.fragment', (e) => {
-                this.render(e.target)
+                let target = e.target
+
+                // 判断是否通关
+                if(this._isClear()) 
+                    this.congratulations()
+
+                // 更新渲染拼图
+                this.render(target)
                 this.clickSound.play()
                 return false
             })
@@ -179,6 +208,8 @@
                 arr.splice(num, 1)
 
             }
+
+            return this
         }
         render(clickTarget) { //绘制拼图改变
             let sideDoms = this._getSideDoms(clickTarget)

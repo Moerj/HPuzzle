@@ -40,6 +40,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
             // 碎片的定位数组
             this.positionArry = [];
+
+            // 点击音效
+            this.clickSound = $('<audio src="' + this.opts.clickSound + '" preload></audio>')[0];
+
+            // 胜利音效
+            this.clearSound = $('<audio src="' + this.opts.clearSound + '" preload></audio>')[0];
         }
 
         _createClass(Puzzle, [{
@@ -52,6 +58,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         }, {
             key: '_getSideDoms',
             value: function _getSideDoms(dom) {
+                //获取点击目标的上下左右
                 var top = parseInt(dom.style.top);
                 var left = parseInt(dom.style.left);
                 var h = dom.offsetHeight;
@@ -79,6 +86,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
 
                 return sideDoms;
+            }
+        }, {
+            key: '_isClear',
+            value: function _isClear() {
+                //是否通关
+                for (var i = 0; i < this.items.length; i++) {
+                    var item = this.items[i];
+                    item.style.top = item._puzzleTop;
+                    item.style.left = item._puzzleLeft;
+
+                    if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+        }, {
+            key: 'congratulations',
+            value: function congratulations() {
+                //触发胜利
+                this.items.hide();
+                this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
+                this.clearSound.play();
             }
         }, {
             key: 'create',
@@ -138,18 +168,23 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 // 给碎片dom 加上序号
                 this.items.each(function (index, item) {
+                    item._puzzleTop = item.style.top;
+                    item._puzzleLeft = item.style.left;
                     item._puzzleIndex = index;
 
                     // 记录每个碎片当前位置的定位
                     _this.positionArry[index] = { left: item.style.left, top: item.style.top };
                 });
 
-                // 创建点击音效
-                this.clickSound = $('<audio src="sounds/slide.wav" preload></audio>')[0];
-
                 // 每个碎片点击事件
                 $(this.puzzle).on('click', '.fragment', function (e) {
-                    _this.render(e.target);
+                    var target = e.target;
+
+                    // 判断是否通关
+                    if (_this._isClear()) _this.congratulations();
+
+                    // 更新渲染拼图
+                    _this.render(target);
                     _this.clickSound.play();
                     return false;
                 });
@@ -182,6 +217,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     // 从新数组中移除已经重定位的碎片
                     arr.splice(num, 1);
                 }
+
+                return this;
             }
         }, {
             key: 'render',
