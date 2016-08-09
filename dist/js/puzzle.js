@@ -93,9 +93,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 //是否通关
                 for (var i = 0; i < this.items.length; i++) {
                     var item = this.items[i];
-                    item.style.top = item._puzzleTop;
-                    item.style.left = item._puzzleLeft;
-
                     if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
                         return false;
                     }
