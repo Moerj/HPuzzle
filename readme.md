@@ -12,7 +12,7 @@ var puzzle = Puzzle({
 }).init()
 ```
   
-  
+
 ## Option  
 
 ### imgUrl
@@ -38,3 +38,6 @@ var puzzle = Puzzle({
 
 ### init()
 初始化生成拼图，再次调用则会重新随机初始化拼图
+
+### setLevel(num)
+设置拼图等级

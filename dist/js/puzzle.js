@@ -31,6 +31,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             if (opts.level > 3) {
                 opts.level = 3;
             }
+
             this.row = opts.level + 2;
 
             // 拼图碎片数
@@ -98,19 +99,35 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return true;
             }
         }, {
+            key: '_click',
+            value: function _click(clickTarget) {
+                //绘制拼图改变
+                var sideDoms = this._getSideDoms(clickTarget);
+                var blank = void 0;
+                var temp = {
+                    top: parseInt(clickTarget.style.top) + 'px',
+                    left: parseInt(clickTarget.style.left) + 'px'
+                };
+                for (var key in sideDoms) {
+                    if (sideDoms[key].className == '') {
+                        // 获取到空白块
+                        blank = sideDoms[key];
+                        // 空白快和点击块交换位置
+                        clickTarget.style.top = blank.style.top;
+                        clickTarget.style.left = blank.style.left;
+                        blank.style.top = temp.top;
+                        blank.style.left = temp.left;
+                        break;
+                    }
+                }
+            }
+        }, {
             key: 'clearance',
             value: function clearance() {
                 //触发胜利
                 this.items.hide();
                 this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
                 this.clearSound.play();
-            }
-        }, {
-            key: 'reset',
-            value: function reset() {
-                //重置
-                this.items.show();
-                this.puzzle.css({ background: 'transparent' });
                 return this;
             }
         }, {
@@ -192,7 +209,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }, 310);
 
                     // 更新渲染拼图
-                    _this.render(target);
+                    _this._click(target);
                     _this.clickSound.play();
                     return false;
                 });
@@ -229,27 +246,31 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return this;
             }
         }, {
-            key: 'render',
-            value: function render(clickTarget) {
-                //绘制拼图改变
-                var sideDoms = this._getSideDoms(clickTarget);
-                var blank = void 0;
-                var temp = {
-                    top: parseInt(clickTarget.style.top) + 'px',
-                    left: parseInt(clickTarget.style.left) + 'px'
-                };
-                for (var key in sideDoms) {
-                    if (sideDoms[key].className == '') {
-                        // 获取到空白块
-                        blank = sideDoms[key];
-                        // 空白快和点击块交换位置
-                        clickTarget.style.top = blank.style.top;
-                        clickTarget.style.left = blank.style.left;
-                        blank.style.top = temp.top;
-                        blank.style.left = temp.left;
-                        break;
-                    }
+            key: 'destory',
+            value: function destory() {
+                $(this.puzzle).remove();
+                return this;
+            }
+        }, {
+            key: 'setLevel',
+            value: function setLevel(num) {
+                num = parseInt(num);
+                if (num < 1) {
+                    num = 1;
                 }
+                if (num > 3) {
+                    num = 3;
+                }
+                this.opts.level = num;
+                this.row = this.opts.level + 2;
+                this.fragment = this.row * this.row;
+                this.destory().create().random();
+                return this;
+            }
+        }, {
+            key: 'getLevel',
+            value: function getLevel() {
+                return this.opts.level;
             }
         }]);
 
@@ -260,7 +281,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         var p = new Puzzle(opts);
         p.init = function () {
             if (p.inited) {
-                p.reset().random();
+                p.destory().create().random();
             } else {
                 p.inited = true;
                 p.create();

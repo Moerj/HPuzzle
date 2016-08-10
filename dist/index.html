@@ -8,13 +8,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="viewport" content="width=device-width,user-scalable=yes">
 
+    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/puzzle.css">
     <link rel="stylesheet" href="css/base.css">
 </head>
 
 <body>
 
-    <img id="simple" src="images/img2.jpg" width="300">
+    <div class="contrl">
+        <img id="simple" src="images/img2.jpg" width="600">
+        <select id="setLevel" class="form-control" style="width:600px" required="required">
+            <option value="1">level 1</option>
+            <option value="2">level 2</option>
+            <option value="3">level 3</option>
+        </select>
+    </div>
+
+
+
 
     <div id="contanier">
 
@@ -36,6 +47,10 @@
                 clickSound: 'sounds/slide.wav', //拼图音效
                 clearSound: 'sounds/clear.wav' //胜利音效
             }).init()
+
+            $('#setLevel').on('change',function(){
+                puzzle.setLevel($(this).val())
+            })
         })
     </script>
 </body>

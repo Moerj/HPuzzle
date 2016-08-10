@@ -24,7 +24,8 @@
             if (opts.level > 3) {
                 opts.level = 3
             }
-            this.row = opts.level + 2;
+
+            this.row = opts.level + 2
 
             // 拼图碎片数
             this.fragment = this.row * this.row
@@ -81,14 +82,31 @@
             }
             return true
         }
+        _click(clickTarget) { //绘制拼图改变
+            let sideDoms = this._getSideDoms(clickTarget)
+            let blank
+            let temp = {
+                top: parseInt(clickTarget.style.top) + 'px',
+                left: parseInt(clickTarget.style.left) + 'px'
+            }
+            for (let key in sideDoms) {
+                if (sideDoms[key].className == '') {
+                    // 获取到空白块
+                    blank = sideDoms[key]
+                        // 空白快和点击块交换位置
+                    clickTarget.style.top = blank.style.top
+                    clickTarget.style.left = blank.style.left
+                    blank.style.top = temp.top
+                    blank.style.left = temp.left
+                    break
+                }
+            }
+
+        }
         clearance() { //触发胜利
             this.items.hide()
             this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
             this.clearSound.play()
-        }
-        reset(){ //重置
-            this.items.show()
-            this.puzzle.css({background:'transparent'})
             return this
         }
         create() { //创建结构
@@ -178,10 +196,10 @@
                 }
                 timer = setTimeout(() => {
                     if (this._isClear()) this.clearance()
-                },310)
+                }, 310)
 
                 // 更新渲染拼图
-                this.render(target)
+                this._click(target)
                 this.clickSound.play()
                 return false
             })
@@ -215,26 +233,26 @@
 
             return this
         }
-        render(clickTarget) { //绘制拼图改变
-            let sideDoms = this._getSideDoms(clickTarget)
-            let blank
-            let temp = {
-                top: parseInt(clickTarget.style.top) + 'px',
-                left: parseInt(clickTarget.style.left) + 'px'
+        destory() {
+            $(this.puzzle).remove()
+            return this
+        }
+        setLevel(num) {
+            num = parseInt(num)
+            if (num < 1) {
+                num = 1
             }
-            for (let key in sideDoms) {
-                if (sideDoms[key].className == '') {
-                    // 获取到空白块
-                    blank = sideDoms[key]
-                        // 空白快和点击块交换位置
-                    clickTarget.style.top = blank.style.top
-                    clickTarget.style.left = blank.style.left
-                    blank.style.top = temp.top
-                    blank.style.left = temp.left
-                    break
-                }
+            if (num > 3) {
+                num = 3
             }
-
+            this.opts.level = num
+            this.row = this.opts.level + 2;
+            this.fragment = this.row * this.row
+            this.destory().create().random()
+            return this
+        }
+        getLevel() {
+            return this.opts.level
         }
     }
 
@@ -243,9 +261,9 @@
         let p = new Puzzle(opts)
         p.init = () => {
             if (p.inited) {
-                p.reset().random()
-            }else{
-                p.inited=true
+                p.destory().create().random()
+            } else {
+                p.inited = true
                 p.create()
                 setTimeout(() => {
                     p.random()
