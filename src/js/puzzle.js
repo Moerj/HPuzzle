@@ -12,9 +12,7 @@
                 size: '600',
                 level: 1
             }
-            if (typeof opts.contanier === 'string') {
-                opts.contanier = $(opts.contanier)
-            }
+            opts.contanier = $(opts.contanier)
 
             // 配置参数
             this.opts = $.extend({}, DEFAULT, opts);
@@ -83,10 +81,15 @@
             }
             return true
         }
-        congratulations() { //触发胜利
+        clearance() { //触发胜利
             this.items.hide()
             this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
             this.clearSound.play()
+        }
+        reset(){ //重置
+            this.items.show()
+            this.puzzle.css({background:'transparent'})
+            return this
         }
         create() { //创建结构
             //拼图的第一块为空白占位块
@@ -174,7 +177,7 @@
                     clearTimeout(timer)
                 }
                 timer = setTimeout(() => {
-                    if (this._isClear()) this.congratulations()
+                    if (this._isClear()) this.clearance()
                 },310)
 
                 // 更新渲染拼图
@@ -239,10 +242,16 @@
     window.Puzzle = function(opts) {
         let p = new Puzzle(opts)
         p.init = () => {
-            p.create()
-            setTimeout(() => {
-                p.random()
-            })
+            if (p.inited) {
+                p.reset().random()
+            }else{
+                p.inited=true
+                p.create()
+                setTimeout(() => {
+                    p.random()
+                })
+            }
+            return p
         }
         return p
     };

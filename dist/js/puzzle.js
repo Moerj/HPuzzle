@@ -19,9 +19,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 size: '600',
                 level: 1
             };
-            if (typeof opts.contanier === 'string') {
-                opts.contanier = $(opts.contanier);
-            }
+            opts.contanier = $(opts.contanier);
 
             // 配置参数
             this.opts = $.extend({}, DEFAULT, opts);
@@ -100,12 +98,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 return true;
             }
         }, {
-            key: 'congratulations',
-            value: function congratulations() {
+            key: 'clearance',
+            value: function clearance() {
                 //触发胜利
                 this.items.hide();
                 this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
                 this.clearSound.play();
+            }
+        }, {
+            key: 'reset',
+            value: function reset() {
+                //重置
+                this.items.show();
+                this.puzzle.css({ background: 'transparent' });
+                return this;
             }
         }, {
             key: 'create',
@@ -182,7 +188,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         clearTimeout(timer);
                     }
                     timer = setTimeout(function () {
-                        if (_this._isClear()) _this.congratulations();
+                        if (_this._isClear()) _this.clearance();
                     }, 310);
 
                     // 更新渲染拼图
@@ -253,10 +259,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     window.Puzzle = function (opts) {
         var p = new Puzzle(opts);
         p.init = function () {
-            p.create();
-            setTimeout(function () {
-                p.random();
-            });
+            if (p.inited) {
+                p.reset().random();
+            } else {
+                p.inited = true;
+                p.create();
+                setTimeout(function () {
+                    p.random();
+                });
+            }
+            return p;
         };
         return p;
     };
