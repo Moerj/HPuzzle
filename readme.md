@@ -22,7 +22,7 @@ var puzzle = Puzzle({
 将拼图放入指定的 dom 元素，可以传入 id 或者是 dom 对象
 
 ### size
-定义拼图大小
+定义拼图大小，单位计算为 px
 
 ### level
 游戏难度 1~3
