@@ -21,6 +21,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             };
             opts.contanier = $(opts.contanier);
 
+            // 格式化尺寸单位
+            if (opts.size) {
+                opts.size = parseInt(opts.size);
+            }
+
             // 配置参数
             this.opts = $.extend({}, DEFAULT, opts);
 
@@ -141,7 +146,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 var _this = this;
 
                 //创建结构
-                //拼图的第一块为空白占位块
                 var puzzleString = '';
                 var fragment = this.fragment;
                 var row = this.row;
@@ -167,6 +171,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
 
                     // 拼图碎片必须的样式
+                    //拼图的第一块为空白占位块
                     if (i > 0) {
                         style += '\n                    background:#ddd url(' + this.opts.imgUrl + ') no-repeat;\n                    cursor: pointer;\n                    ';
                         className += 'fragment';

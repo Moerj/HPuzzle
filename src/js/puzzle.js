@@ -14,6 +14,11 @@
             }
             opts.contanier = $(opts.contanier)
 
+            // 格式化尺寸单位
+            if (opts.size) {
+                opts.size = parseInt(opts.size)
+            }
+
             // 配置参数
             this.opts = $.extend({}, DEFAULT, opts);
 
@@ -71,7 +76,7 @@
                     let itemLeft = parseInt(item.style['left'])
                     let topDiff = Math.abs(itemTop - side[key]['top'])
                     let leftDiff = Math.abs(itemLeft - side[key]['left'])
-                    if(topDiff<2 && leftDiff<2){
+                    if (topDiff < 2 && leftDiff < 2) {
                         sideDoms[key] = item
                     }
                 }
@@ -115,7 +120,6 @@
             return this
         }
         create() { //创建结构
-            //拼图的第一块为空白占位块
             let puzzleString = ''
             let fragment = this.fragment
             let row = this.row
@@ -141,6 +145,7 @@
                 }
 
                 // 拼图碎片必须的样式
+                //拼图的第一块为空白占位块
                 if (i > 0) {
                     style += `
                     background:#ddd url(${this.opts.imgUrl}) no-repeat;
