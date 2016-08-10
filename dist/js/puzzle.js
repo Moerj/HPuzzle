@@ -60,11 +60,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 //获取点击目标的上下左右
                 var top = parseInt(dom.style.top);
                 var left = parseInt(dom.style.left);
-                var h = dom.offsetHeight;
-                var w = dom.offsetWidth;
+                var h = parseInt(dom.offsetHeight);
+                var w = parseInt(dom.offsetWidth);
                 var items = this.items;
 
-                // 上下左右相邻的碎片
+                // 上下左右相邻的碎片 理论中的坐标
                 var side = {
                     top: { top: top - h, left: left },
                     bottom: { top: top + h, left: left },
@@ -74,16 +74,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 var sideDoms = {};
                 var keys = ['top', 'left', 'bottom', 'right'];
+
+                // 以实际坐标跟理论坐标对比，误差合理的判定为领边碎片
                 for (var i = 0; i < items.length; i++) {
                     var item = items[i];
                     for (var j = 0; j < keys.length; j++) {
                         var key = keys[j];
-                        if (parseInt(item.style['top']) == side[key]['top'] && parseInt(item.style['left']) == side[key]['left']) {
+                        var itemTop = parseInt(item.style['top']);
+                        var itemLeft = parseInt(item.style['left']);
+                        var topDiff = Math.abs(itemTop - side[key]['top']);
+                        var leftDiff = Math.abs(itemLeft - side[key]['left']);
+                        if (topDiff < 2 && leftDiff < 2) {
                             sideDoms[key] = item;
                         }
                     }
                 }
-
                 return sideDoms;
             }
         }, {

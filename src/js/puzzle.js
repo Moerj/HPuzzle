@@ -47,11 +47,11 @@
         _getSideDoms(dom) { //获取点击目标的上下左右
             let top = parseInt(dom.style.top)
             let left = parseInt(dom.style.left)
-            let h = dom.offsetHeight
-            let w = dom.offsetWidth
+            let h = parseInt(dom.offsetHeight)
+            let w = parseInt(dom.offsetWidth)
             let items = this.items
 
-            // 上下左右相邻的碎片
+            // 上下左右相邻的碎片 理论中的坐标
             let side = {
                 top: { top: top - h, left: left },
                 bottom: { top: top + h, left: left },
@@ -61,16 +61,21 @@
 
             let sideDoms = {};
             let keys = ['top', 'left', 'bottom', 'right']
+
+            // 以实际坐标跟理论坐标对比，误差合理的判定为领边碎片
             for (let i = 0; i < items.length; i++) {
                 let item = items[i]
                 for (let j = 0; j < keys.length; j++) {
                     let key = keys[j]
-                    if (parseInt(item.style['top']) == side[key]['top'] && parseInt(item.style['left']) == side[key]['left']) {
+                    let itemTop = parseInt(item.style['top'])
+                    let itemLeft = parseInt(item.style['left'])
+                    let topDiff = Math.abs(itemTop - side[key]['top'])
+                    let leftDiff = Math.abs(itemLeft - side[key]['left'])
+                    if(topDiff<2 && leftDiff<2){
                         sideDoms[key] = item
                     }
                 }
             }
-
             return sideDoms
         }
         _isClear() { //是否通关
