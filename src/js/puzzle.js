@@ -247,7 +247,7 @@
             $(this.puzzle).remove()
             return this
         }
-        setLevel(num) {
+        setLevel(num) { //设置难度
             num = parseInt(num)
             if (num < 1) {
                 num = 1
