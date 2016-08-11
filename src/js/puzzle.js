@@ -2,7 +2,7 @@
  * 拼图核心js es6
  */
 
-(function() {
+{
 
     class Puzzle {
         constructor(opts) {
@@ -267,7 +267,7 @@
     }
 
 
-    window.Puzzle = function(opts) {
+    window.Puzzle = (opts) => {
         let p = new Puzzle(opts)
         p.init = () => {
             if (p.inited) {
@@ -283,4 +283,6 @@
         }
         return p
     };
-})()
+
+
+}
