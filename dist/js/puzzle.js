@@ -110,27 +110,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return true;
                 }
             }, {
-                key: '_click',
-                value: function _click(clickTarget) {
+                key: '_move',
+                value: function _move(traget) {
                     //绘制拼图改变
-                    var sideDoms = this._getSideDoms(clickTarget);
+                    var sideDoms = this._getSideDoms(traget);
                     var blank = void 0;
                     var temp = {
-                        top: parseInt(clickTarget.style.top) + 'px',
-                        left: parseInt(clickTarget.style.left) + 'px'
+                        top: parseInt(traget.style.top) + 'px',
+                        left: parseInt(traget.style.left) + 'px'
                     };
                     for (var key in sideDoms) {
                         if (sideDoms[key].className == '') {
                             // 获取到空白块
                             blank = sideDoms[key];
                             // 空白快和点击块交换位置
-                            clickTarget.style.top = blank.style.top;
-                            clickTarget.style.left = blank.style.left;
+                            traget.style.top = blank.style.top;
+                            traget.style.left = blank.style.left;
                             blank.style.top = temp.top;
                             blank.style.left = temp.left;
                             break;
                         }
                     }
+                    this.clickSound.play();
                 }
             }, {
                 key: '_keyDown',
@@ -150,7 +151,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                     for (var _key in sideDoms) {
                         if (_key == direction) {
-                            this._click(sideDoms[direction]);
+                            this._move(sideDoms[direction]);
                         }
                     }
                 }
@@ -237,8 +238,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         }, 310);
 
                         // 更新渲染拼图
-                        _this._click(target);
-                        _this.clickSound.play();
+                        _this._move(target);
                         return false;
                     });
 

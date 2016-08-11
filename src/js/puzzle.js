@@ -93,26 +93,26 @@
             }
             return true
         }
-        _click(clickTarget) { //绘制拼图改变
-            let sideDoms = this._getSideDoms(clickTarget)
+        _move(traget) { //绘制拼图改变
+            let sideDoms = this._getSideDoms(traget)
             let blank
             let temp = {
-                top: parseInt(clickTarget.style.top) + 'px',
-                left: parseInt(clickTarget.style.left) + 'px'
+                top: parseInt(traget.style.top) + 'px',
+                left: parseInt(traget.style.left) + 'px'
             }
             for (let key in sideDoms) {
                 if (sideDoms[key].className == '') {
                     // 获取到空白块
                     blank = sideDoms[key]
                         // 空白快和点击块交换位置
-                    clickTarget.style.top = blank.style.top
-                    clickTarget.style.left = blank.style.left
+                    traget.style.top = blank.style.top
+                    traget.style.left = blank.style.left
                     blank.style.top = temp.top
                     blank.style.left = temp.left
                     break
                 }
             }
-
+            this.clickSound.play()
         }
         _keyDown(event) {
             let sideDoms = this._getSideDoms(this.items.blank)
@@ -130,7 +130,7 @@
             }
             for (let key in sideDoms) {
                 if (key == direction) {
-                    this._click(sideDoms[direction])
+                    this._move(sideDoms[direction])
                 }
             }
         }
@@ -228,8 +228,7 @@
                 }, 310)
 
                 // 更新渲染拼图
-                this._click(target)
-                this.clickSound.play()
+                this._move(target)
                 return false
             })
 
