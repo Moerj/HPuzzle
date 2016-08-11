@@ -224,7 +224,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         _this.positionArry[index] = { left: item.style.left, top: item.style.top };
                     });
 
-                    // 每个碎片点击事件
+                    // 移动碎片事件
                     $(this.puzzle).on('click', '.fragment', function (e) {
                         var target = e.target;
                         var timer = target._puzzleTimer;
@@ -240,6 +240,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         // 更新渲染拼图
                         _this._move(target);
                         return false;
+                    });
+                    $(document).on('keydown', function (e) {
+                        _this._keyDown(e);
                     });
 
                     this.opts.contanier.append(this.puzzle);
@@ -325,10 +328,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     p.create();
                     setTimeout(function () {
                         p.random();
-                    });
-                    // 创建键盘事件
-                    $(document).on('keydown', function (e) {
-                        p._keyDown(e);
                     });
                 }
                 return p;

@@ -214,7 +214,7 @@
 
             })
 
-            // 每个碎片点击事件
+            // 移动碎片事件
             $(this.puzzle).on('click', '.fragment', (e) => {
                 let target = e.target
                 let timer = target._puzzleTimer
@@ -230,6 +230,9 @@
                 // 更新渲染拼图
                 this._move(target)
                 return false
+            })
+            $(document).on('keydown', (e) => {
+                this._keyDown(e)
             })
 
             this.opts.contanier.append(this.puzzle)
@@ -300,10 +303,6 @@
                 p.inited = true
                 p.create()
                 setTimeout(() => { p.random() })
-                    // 创建键盘事件
-                $(document).on('keydown', (e) => {
-                    p._keyDown(e)
-                })
             }
             return p
         };
