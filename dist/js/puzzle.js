@@ -133,13 +133,26 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                 }
             }, {
-                key: 'clearance',
-                value: function clearance() {
-                    //触发胜利
-                    this.items.hide();
-                    this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
-                    this.clearSound.play();
-                    return this;
+                key: '_keyDown',
+                value: function _keyDown(event) {
+                    var sideDoms = this._getSideDoms(this.items.blank);
+                    var keys = {
+                        top: 40,
+                        bottom: 38,
+                        left: 39,
+                        right: 37
+                    };
+                    var direction = void 0;
+                    for (var key in keys) {
+                        if (event.which === keys[key]) {
+                            direction = key;
+                        }
+                    }
+                    for (var _key in sideDoms) {
+                        if (_key == direction) {
+                            this._click(sideDoms[direction]);
+                        }
+                    }
                 }
             }, {
                 key: 'create',
@@ -202,6 +215,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         item._puzzleLeft = item.style.left;
                         item._puzzleIndex = index;
 
+                        // 记录第一个空白块
+                        if (index === 0) {
+                            _this.items.blank = item;
+                        }
                         // 记录每个碎片当前位置的定位
                         _this.positionArry[index] = { left: item.style.left, top: item.style.top };
                     });
@@ -228,6 +245,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     this.opts.contanier.append(this.puzzle);
 
                     return this;
+                }
+            }, {
+                key: 'setLevel',
+                value: function setLevel(num) {
+                    //设置难度
+                    num = parseInt(num);
+                    if (num < 1) {
+                        num = 1;
+                    }
+                    if (num > 3) {
+                        num = 3;
+                    }
+                    this.opts.level = num;
+                    this.row = this.opts.level + 2;
+                    this.fragment = this.row * this.row;
+                    this.destory().create().random();
+                    return this;
+                }
+            }, {
+                key: 'getLevel',
+                value: function getLevel() {
+                    return this.opts.level;
                 }
             }, {
                 key: 'random',
@@ -257,32 +296,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return this;
                 }
             }, {
+                key: 'clearance',
+                value: function clearance() {
+                    //触发胜利
+                    this.items.hide();
+                    this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
+                    this.clearSound.play();
+                    return this;
+                }
+            }, {
                 key: 'destory',
                 value: function destory() {
                     $(this.puzzle).remove();
                     return this;
-                }
-            }, {
-                key: 'setLevel',
-                value: function setLevel(num) {
-                    //设置难度
-                    num = parseInt(num);
-                    if (num < 1) {
-                        num = 1;
-                    }
-                    if (num > 3) {
-                        num = 3;
-                    }
-                    this.opts.level = num;
-                    this.row = this.opts.level + 2;
-                    this.fragment = this.row * this.row;
-                    this.destory().create().random();
-                    return this;
-                }
-            }, {
-                key: 'getLevel',
-                value: function getLevel() {
-                    return this.opts.level;
                 }
             }]);
 
@@ -299,6 +325,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     p.create();
                     setTimeout(function () {
                         p.random();
+                    });
+                    // 创建键盘事件
+                    $(document).on('keydown', function (e) {
+                        p._keyDown(e);
                     });
                 }
                 return p;

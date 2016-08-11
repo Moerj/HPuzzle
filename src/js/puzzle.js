@@ -43,6 +43,7 @@
 
             // 胜利音效
             this.clearSound = $(`<audio src="${this.opts.clearSound}" preload></audio>`)[0]
+
         }
         _getRandomNum(Min, Max) {
             let Range = Max - Min;
@@ -113,11 +114,25 @@
             }
 
         }
-        clearance() { //触发胜利
-            this.items.hide()
-            this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
-            this.clearSound.play()
-            return this
+        _keyDown(event) {
+            let sideDoms = this._getSideDoms(this.items.blank)
+            let keys = {
+                top: 40,
+                bottom: 38,
+                left: 39,
+                right: 37
+            }
+            let direction;
+            for (let key in keys) {
+                if (event.which === keys[key]) {
+                    direction = key
+                }
+            }
+            for (let key in sideDoms) {
+                if (key == direction) {
+                    this._click(sideDoms[direction])
+                }
+            }
         }
         create() { //创建结构
             let puzzleString = ''
@@ -190,6 +205,10 @@
                 item._puzzleLeft = item.style.left;
                 item._puzzleIndex = index
 
+                // 记录第一个空白块
+                if (index === 0) {
+                    this.items.blank = item
+                }
                 // 记录每个碎片当前位置的定位
                 this.positionArry[index] = { left: item.style.left, top: item.style.top }
 
@@ -218,6 +237,23 @@
 
             return this
         }
+        setLevel(num) { //设置难度
+            num = parseInt(num)
+            if (num < 1) {
+                num = 1
+            }
+            if (num > 3) {
+                num = 3
+            }
+            this.opts.level = num
+            this.row = this.opts.level + 2;
+            this.fragment = this.row * this.row
+            this.destory().create().random()
+            return this
+        }
+        getLevel() {
+            return this.opts.level
+        }
         random() { //随机排序拼图碎片
             // 建立一个新的数组，它存放所有拼图碎片
             let arr = []
@@ -243,26 +279,15 @@
 
             return this
         }
+        clearance() { //触发胜利
+            this.items.hide()
+            this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
+            this.clearSound.play()
+            return this
+        }
         destory() {
             $(this.puzzle).remove()
             return this
-        }
-        setLevel(num) { //设置难度
-            num = parseInt(num)
-            if (num < 1) {
-                num = 1
-            }
-            if (num > 3) {
-                num = 3
-            }
-            this.opts.level = num
-            this.row = this.opts.level + 2;
-            this.fragment = this.row * this.row
-            this.destory().create().random()
-            return this
-        }
-        getLevel() {
-            return this.opts.level
         }
     }
 
@@ -275,14 +300,18 @@
             } else {
                 p.inited = true
                 p.create()
-                setTimeout(() => {
-                    p.random()
+                setTimeout(() => { p.random() })
+                    // 创建键盘事件
+                $(document).on('keydown', (e) => {
+                    p._keyDown(e)
                 })
             }
             return p
-        }
+        };
         return p
     };
+
+
 
 
 }
