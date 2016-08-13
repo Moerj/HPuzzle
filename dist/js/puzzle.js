@@ -179,6 +179,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var _this2 = this;
 
                     //创建结构
+                    if (this.puzzle) {
+                        throw new Error('this puzzle has already created. if you want to create again, do destory it first.');
+                    }
+
                     var puzzleString = '';
                     var fragment = this.fragment;
                     var row = this.row;
@@ -373,6 +377,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 key: 'destory',
                 value: function destory() {
                     $(this.puzzle).remove();
+                    this.puzzle = null;
                     return this;
                 }
             }]);

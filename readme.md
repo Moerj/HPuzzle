@@ -40,8 +40,17 @@ var puzzle = Puzzle({
 
 ## API  
 
+### create()
+创建拼图
+
+### random()
+随机排序拼图
+
 ### init()
-初始化生成拼图，再次调用则会重新随机初始化拼图
+创建并随机排序，相当于puzzle.create().random()，再次调用则会重新随机初始化拼图
+
+### destory()
+销毁创建的拼图
 
 ### setLevel(num)
 设置拼图等级，num整数，且必须大于1

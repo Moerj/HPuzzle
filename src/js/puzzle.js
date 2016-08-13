@@ -151,6 +151,10 @@
             }
         }
         create() { //创建结构
+            if (this.puzzle) {
+                throw new Error('this puzzle has already created. if you want to create again, do destory it first.')
+            }
+
             let puzzleString = ''
             let fragment = this.fragment
             let row = this.row
@@ -348,6 +352,7 @@
         }
         destory() {
             $(this.puzzle).remove()
+            this.puzzle = null
             return this
         }
     }
