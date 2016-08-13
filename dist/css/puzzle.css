@@ -1,0 +1,12 @@
+@charset "UTF-8";
+/**
+ * 拼图核心样式
+ * 拼图的 hover 和 css3动画效果
+ */
+.puzzle > .fragment {
+  -webkit-transition: 0.3s ease;
+  transition: 0.3s ease;
+  cursor: pointer; }
+  .puzzle > .fragment:hover {
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    z-index: 1; }

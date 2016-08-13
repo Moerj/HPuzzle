@@ -1,0 +1,15 @@
+/**
+ * 拼图核心样式
+ * 拼图的 hover 和 css3动画效果
+ */
+
+.puzzle{
+    >.fragment{
+        transition: 0.3s ease;
+        cursor:pointer;
+        &:hover{
+            box-shadow: 0 0 10px 0 rgba($color: black, $alpha: 0.3);
+            z-index:1;
+        }
+    }
+}
