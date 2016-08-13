@@ -1,9 +1,9 @@
 /**
- * HPuzzle   v0.1.0
- * @license  MIT
- * Designed  and built by Moer
- * Demo      https://moerj.github.io/HPuzzle/
- * GitHub    https://github.com/Moerj/HPuzzle
+ * HPuzzle  v0.1.0
+ * @license MIT
+ * Designed and built by Moer
+ * Demo     https://moerj.github.io/HPuzzle/
+ * GitHub   https://github.com/Moerj/HPuzzle
  */
 
 {
