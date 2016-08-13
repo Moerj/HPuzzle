@@ -255,8 +255,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 key: 'reSize',
                 value: function reSize(size) {
                     var oldSize = this.opts.size;
-                    // let oldItemSize = oldSize / this.row
-                    var diff = size / oldSize * 1;
+                    var oldItemSize = oldSize / this.row;
                     var newItemSize = size / this.row;
                     var newBackgroundSize = void 0;
 
@@ -270,13 +269,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     // 更新参数
                     this.opts.size = parseInt(size);
 
+                    // 更新拼图容器尺寸
+                    this.puzzle.css({
+                        width: size,
+                        height: size
+                    });
+
                     // 更新每个碎片属性
                     $.each(this.items, function (index, item) {
                         var $item = $(item);
                         var top = parseInt(item.style.top);
                         var left = parseInt(item.style.left);
-                        var newTop = top * diff;
-                        var newLeft = left * diff;
+                        var topIndex = Math.round(top / oldItemSize);
+                        var leftIndex = Math.round(left / oldItemSize);
+                        var newTop = newItemSize * topIndex;
+                        var newLeft = newItemSize * leftIndex;
                         $item.css({
                             width: newItemSize,
                             height: newItemSize,
@@ -285,12 +292,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             backgroundSize: newBackgroundSize,
                             backgroundPosition: '-' + newTop + 'px -' + newLeft + 'px'
                         });
-                    });
-
-                    // 更新拼图容器尺寸
-                    this.puzzle.css({
-                        width: size,
-                        height: size
                     });
 
                     return this;

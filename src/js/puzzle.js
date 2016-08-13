@@ -243,9 +243,8 @@
         }
         reSize(size) {
             let oldSize = this.opts.size
-            // let oldItemSize = oldSize / this.row
-            let diff = size / oldSize * 1
-            let newItemSize = size/this.row
+            let oldItemSize = oldSize / this.row
+            let newItemSize = size / this.row
             let newBackgroundSize;
 
             // 计算新碎片的背景尺寸
@@ -258,13 +257,21 @@
             // 更新参数
             this.opts.size = parseInt(size)
 
+            // 更新拼图容器尺寸
+            this.puzzle.css({
+                width: size,
+                height: size
+            })
+
             // 更新每个碎片属性
             $.each(this.items, (index, item) => {
                 let $item = $(item)
                 let top = parseInt(item.style.top)
                 let left = parseInt(item.style.left)
-                let newTop = top * diff
-                let newLeft = left * diff
+                let topIndex = Math.round(top / oldItemSize)
+                let leftIndex = Math.round(left / oldItemSize)
+                let newTop = newItemSize * topIndex
+                let newLeft = newItemSize * leftIndex
                 $item.css({
                     width: newItemSize,
                     height: newItemSize,
@@ -274,13 +281,7 @@
                     backgroundPosition: `-${newTop}px -${newLeft}px`
                 })
             })
-
-            // 更新拼图容器尺寸
-            this.puzzle.css({
-                width: size,
-                height: size
-            })
-
+            
             return this
         }
         setLevel(num) { //设置难度
