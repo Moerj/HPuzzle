@@ -59,7 +59,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (!window.Puzzle._isKeyDownEventBind) {
                     window.Puzzle._isKeyDownEventBind = true;
                     $(document).on('keydown', function (e) {
-                        _this._keyDown(e);
+                        if (document.activeElement == _this.puzzle) {
+                            e.preventDefault();
+                            _this._keyDown(e);
+                        }
                     });
                 }
             }
@@ -213,7 +216,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         leftIndex++;
                         puzzleString += '<div class="' + className + '" style="' + style + '"></div>';
                     }
-                    puzzleString = '<div class="puzzle" style="\n                width:' + this.opts.size + 'px;\n                height:' + this.opts.size + 'px;\n                position:relative;\n            ">' + puzzleString + '</div>';
+                    puzzleString = '<div class="puzzle" tabindex="0" style="\n                width:' + this.opts.size + 'px;\n                height:' + this.opts.size + 'px;\n                position:relative;\n            ">' + puzzleString + '</div>';
 
                     var $puzzle = $(puzzleString);
 

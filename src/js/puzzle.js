@@ -49,7 +49,10 @@
             if (!window.Puzzle._isKeyDownEventBind) {
                 window.Puzzle._isKeyDownEventBind = true
                 $(document).on('keydown', (e) => {
-                    this._keyDown(e)
+                    if (document.activeElement == this.puzzle) {
+                        e.preventDefault()
+                        this._keyDown(e)
+                    }
                 })
             }
 
@@ -196,7 +199,7 @@
                 puzzleString += `<div class="${className}" style="${style}"></div>`;
 
             }
-            puzzleString = `<div class="puzzle" style="
+            puzzleString = `<div class="puzzle" tabindex="0" style="
                 width:${this.opts.size}px;
                 height:${this.opts.size}px;
                 position:relative;
