@@ -1,5 +1,8 @@
 # H5色色的拼图游戏
 
+## Demo
+https://moerj.github.io/HPuzzle/
+
 ## Start
 ```javascript
 var puzzle = Puzzle({
