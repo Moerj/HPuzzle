@@ -47,6 +47,14 @@
             // 图片实例
             this.simpleImg = $(`<img src="${this.opts.imgUrl}">`)[0]
 
+            // 键盘事件
+            if (!window.Puzzle._isKeyDownEventBind) {
+                window.Puzzle._isKeyDownEventBind = true
+                $(document).on('keydown', (e) => {
+                    this._keyDown(e)
+                })
+            }
+
         }
         _getRandomNum(Min, Max) {
             let Range = Max - Min;
@@ -236,9 +244,7 @@
                 this._move(target)
                 return false
             })
-            $(document).on('keydown', (e) => {
-                this._keyDown(e)
-            })
+
 
             this.opts.contanier.append(this.puzzle)
 

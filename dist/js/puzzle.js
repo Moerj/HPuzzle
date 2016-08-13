@@ -12,6 +12,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     (function () {
         var Puzzle = function () {
             function Puzzle(opts) {
+                var _this = this;
+
                 _classCallCheck(this, Puzzle);
 
                 var DEFAULT = {
@@ -54,6 +56,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 // 图片实例
                 this.simpleImg = $('<img src="' + this.opts.imgUrl + '">')[0];
+
+                // 键盘事件
+                if (!window.Puzzle._isKeyDownEventBind) {
+                    window.Puzzle._isKeyDownEventBind = true;
+                    $(document).on('keydown', function (e) {
+                        _this._keyDown(e);
+                    });
+                }
             }
 
             _createClass(Puzzle, [{
@@ -161,7 +171,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }, {
                 key: 'create',
                 value: function create() {
-                    var _this = this;
+                    var _this2 = this;
 
                     //创建结构
                     var puzzleString = '';
@@ -223,10 +233,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // 记录第一个空白块
                         if (index === 0) {
-                            _this.items.blank = item;
+                            _this2.items.blank = item;
                         }
                         // 记录每个碎片当前位置的定位
-                        _this.positionArry[index] = { left: item.style.left, top: item.style.top };
+                        _this2.positionArry[index] = { left: item.style.left, top: item.style.top };
                     });
 
                     // 移动碎片事件
@@ -239,15 +249,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                             clearTimeout(timer);
                         }
                         timer = setTimeout(function () {
-                            if (_this._isClear()) _this.clearance();
+                            if (_this2._isClear()) _this2.clearance();
                         }, 310);
 
                         // 更新渲染拼图
-                        _this._move(target);
+                        _this2._move(target);
                         return false;
-                    });
-                    $(document).on('keydown', function (e) {
-                        _this._keyDown(e);
                     });
 
                     this.opts.contanier.append(this.puzzle);
