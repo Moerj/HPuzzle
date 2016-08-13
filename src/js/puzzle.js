@@ -22,14 +22,12 @@
             // 配置参数
             this.opts = $.extend({}, DEFAULT, opts);
 
-            // 拼图行数
+            // 难度，最小1
             if (opts.level < 1) {
                 opts.level = 1
             }
-            if (opts.level > 3) {
-                opts.level = 3
-            }
 
+            // 拼图行数
             this.row = opts.level + 2
 
             // 拼图碎片数
