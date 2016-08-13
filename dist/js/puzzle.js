@@ -207,10 +207,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     }
                     puzzleString = '<div class="puzzle" style="\n                width:' + this.opts.size + 'px;\n                height:' + this.opts.size + 'px;\n                position:relative;\n            ">' + puzzleString + '</div>';
 
-                    this.puzzle = $(puzzleString);
+                    var $puzzle = $(puzzleString);
+
+                    // 记录容器
+                    this.puzzle = $puzzle[0];
 
                     // 记录所有碎片
-                    this.items = this.puzzle.children();
+                    this.items = $puzzle.children();
 
                     // 给碎片dom 加上序号
                     this.items.each(function (index, item) {
@@ -227,7 +230,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     });
 
                     // 移动碎片事件
-                    $(this.puzzle).on('click', '.fragment', function (e) {
+                    $puzzle.on('click', '.fragment', function (e) {
                         var target = e.target;
                         var timer = target._puzzleTimer;
 
@@ -270,7 +273,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     this.opts.size = parseInt(size);
 
                     // 更新拼图容器尺寸
-                    this.puzzle.css({
+                    $(this.puzzle).css({
                         width: size,
                         height: size
                     });
@@ -350,7 +353,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 value: function clearance() {
                     //触发胜利
                     this.items.hide();
-                    this.puzzle.css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
+                    $(this.puzzle).css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
                     this.clearSound.play();
                     return this;
                 }

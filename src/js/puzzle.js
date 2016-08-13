@@ -196,10 +196,13 @@
                 position:relative;
             ">${puzzleString}</div>`
 
-            this.puzzle = $(puzzleString)
+            let $puzzle = $(puzzleString)
+
+            // 记录容器
+            this.puzzle = $puzzle[0]
 
             // 记录所有碎片
-            this.items = this.puzzle.children()
+            this.items = $puzzle.children()
 
             // 给碎片dom 加上序号
             this.items.each((index, item) => {
@@ -217,7 +220,7 @@
             })
 
             // 移动碎片事件
-            $(this.puzzle).on('click', '.fragment', (e) => {
+            $puzzle.on('click', '.fragment', (e) => {
                 let target = e.target
                 let timer = target._puzzleTimer
 
@@ -258,7 +261,7 @@
             this.opts.size = parseInt(size)
 
             // 更新拼图容器尺寸
-            this.puzzle.css({
+            $(this.puzzle).css({
                 width: size,
                 height: size
             })
@@ -281,7 +284,7 @@
                     backgroundPosition: `-${newTop}px -${newLeft}px`
                 })
             })
-            
+
             return this
         }
         setLevel(num) { //设置难度
@@ -328,7 +331,7 @@
         }
         clearance() { //触发胜利
             this.items.hide()
-            this.puzzle.css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
+            $(this.puzzle).css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
             this.clearSound.play()
             return this
         }
