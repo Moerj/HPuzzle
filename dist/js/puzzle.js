@@ -5,7 +5,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * 拼图核心js es6
+ * HPuzzle   v0.1.0
+ * @license  MIT
+ * Designed  and built by Moer
+ * Demo      https://moerj.github.io/HPuzzle/
+ * GitHub    https://github.com/Moerj/HPuzzle
  */
 
 {

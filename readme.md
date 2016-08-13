@@ -1,4 +1,5 @@
-# H5色色的拼图游戏
+# HPuzzle
+H5色色的拼图游戏
 
 ## Demo
 https://moerj.github.io/HPuzzle/
