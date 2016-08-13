@@ -6,7 +6,7 @@ https://moerj.github.io/HPuzzle/
 ## Start
 ```javascript
 var puzzle = Puzzle({
-    imgUrl: 'images/img2.jpg', //拼图路径
+    imgUrl: 'images/img.jpg', //拼图路径
     contanier: '#contanier', //拼图容器
     size: '600', //定义大小
     level: 1, //设置游戏难度 1~3
