@@ -51,6 +51,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                 // 胜利音效
                 this.clearSound = $('<audio src="' + this.opts.clearSound + '" preload></audio>')[0];
+
+                // 图片实例
+                this.simpleImg = $('<img src="' + this.opts.imgUrl + '">')[0];
             }
 
             _createClass(Puzzle, [{
@@ -168,9 +171,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var top = 0;
                     var left = 0;
                     var leftIndex = 1;
-                    var simpleImg = $('<img src="' + this.opts.imgUrl + '">');
-                    var simpleImgWidth = simpleImg[0].width;
-                    var simpleImgHeight = simpleImg[0].height;
+                    var simpleImgWidth = this.simpleImg.width;
+                    var simpleImgHeight = this.simpleImg.height;
 
                     for (var i = 0; i < fragment; i++) {
                         var className = '';
@@ -246,6 +248,50 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     });
 
                     this.opts.contanier.append(this.puzzle);
+
+                    return this;
+                }
+            }, {
+                key: 'reSize',
+                value: function reSize(size) {
+                    var oldSize = this.opts.size;
+                    // let oldItemSize = oldSize / this.row
+                    var diff = size / oldSize * 1;
+                    var newItemSize = size / this.row;
+                    var newBackgroundSize = void 0;
+
+                    // 计算新碎片的背景尺寸
+                    if (this.simpleImg.width < this.simpleImg.height) {
+                        newBackgroundSize = size + 'px auto';
+                    } else {
+                        newBackgroundSize = 'auto ' + size + 'px';
+                    }
+
+                    // 更新参数
+                    this.opts.size = parseInt(size);
+
+                    // 更新每个碎片属性
+                    $.each(this.items, function (index, item) {
+                        var $item = $(item);
+                        var top = parseInt(item.style.top);
+                        var left = parseInt(item.style.left);
+                        var newTop = top * diff;
+                        var newLeft = left * diff;
+                        $item.css({
+                            width: newItemSize,
+                            height: newItemSize,
+                            top: newTop,
+                            left: newLeft,
+                            backgroundSize: newBackgroundSize,
+                            backgroundPosition: '-' + newTop + 'px -' + newLeft + 'px'
+                        });
+                    });
+
+                    // 更新拼图容器尺寸
+                    this.puzzle.css({
+                        width: size,
+                        height: size
+                    });
 
                     return this;
                 }

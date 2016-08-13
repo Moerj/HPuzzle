@@ -40,20 +40,26 @@
         $(function() {
             FastClick.attach(document.body);
 
-            var width = $('body').width()
-
             var puzzle = Puzzle({
                 imgUrl: 'images/img2.jpg',
                 contanier: '#contanier',
-                size: width,
+                size: $('body').width(),
                 level: 1, //设置游戏难度 1~3
                 clickSound: 'sounds/slide.wav', //拼图音效
                 clearSound: 'sounds/clear.wav' //胜利音效
             }).init()
 
-            $('#setLevel').on('change',function(){
+            $('#setLevel').on('change', function() {
                 puzzle.setLevel($(this).val())
             })
+
+            let t
+            $(window).resize(function() {
+                clearTimeout(t)
+                t = setTimeout(function(){
+                    puzzle.reSize($('body').width())
+                },300)
+            });
         })
     </script>
 </body>

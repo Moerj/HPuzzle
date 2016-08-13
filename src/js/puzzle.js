@@ -44,6 +44,9 @@
             // 胜利音效
             this.clearSound = $(`<audio src="${this.opts.clearSound}" preload></audio>`)[0]
 
+            // 图片实例
+            this.simpleImg = $(`<img src="${this.opts.imgUrl}">`)[0]
+
         }
         _getRandomNum(Min, Max) {
             let Range = Max - Min;
@@ -142,9 +145,8 @@
             let top = 0
             let left = 0
             let leftIndex = 1
-            let simpleImg = $(`<img src="${this.opts.imgUrl}">`)
-            let simpleImgWidth = simpleImg[0].width
-            let simpleImgHeight = simpleImg[0].height
+            let simpleImgWidth = this.simpleImg.width
+            let simpleImgHeight = this.simpleImg.height
 
             for (let i = 0; i < fragment; i++) {
                 let className = ''
@@ -236,6 +238,48 @@
             })
 
             this.opts.contanier.append(this.puzzle)
+
+            return this
+        }
+        reSize(size) {
+            let oldSize = this.opts.size
+            // let oldItemSize = oldSize / this.row
+            let diff = size / oldSize * 1
+            let newItemSize = size/this.row
+            let newBackgroundSize;
+
+            // 计算新碎片的背景尺寸
+            if (this.simpleImg.width < this.simpleImg.height) {
+                newBackgroundSize = `${size}px auto`
+            } else {
+                newBackgroundSize = `auto ${size}px`
+            }
+
+            // 更新参数
+            this.opts.size = parseInt(size)
+
+            // 更新每个碎片属性
+            $.each(this.items, (index, item) => {
+                let $item = $(item)
+                let top = parseInt(item.style.top)
+                let left = parseInt(item.style.left)
+                let newTop = top * diff
+                let newLeft = left * diff
+                $item.css({
+                    width: newItemSize,
+                    height: newItemSize,
+                    top: newTop,
+                    left: newLeft,
+                    backgroundSize: newBackgroundSize,
+                    backgroundPosition: `-${newTop}px -${newLeft}px`
+                })
+            })
+
+            // 更新拼图容器尺寸
+            this.puzzle.css({
+                width: size,
+                height: size
+            })
 
             return this
         }
