@@ -357,6 +357,9 @@
                     // 抽取一个碎片
                 let f = arr[num]
 
+                // 设置碎片当前索引
+                f._puzzleCurrentIndex = i
+
                 // 重绘制这个碎片的定位
                 f.style.top = this.positionArry[i].top
                 f.style.left = this.positionArry[i].left

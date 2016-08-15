@@ -378,6 +378,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         // 抽取一个碎片
                         var f = arr[num];
 
+                        // 设置碎片当前索引
+                        f._puzzleCurrentIndex = _i;
+
                         // 重绘制这个碎片的定位
                         f.style.top = this.positionArry[_i].top;
                         f.style.left = this.positionArry[_i].left;
