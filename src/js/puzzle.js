@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.0
+ * HPuzzle  v0.1.1
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -236,6 +236,7 @@
                 let itemSize = parseInt(this.opts.size / this.row)
                 let itemTop = parseInt(item.style.top)
                 let itemLeft = parseInt(item.style.left)
+                // 当前碎片的定位索引，用于计算出新尺寸的背景定位
                 item._puzzleTopIndex = Math.round(itemTop / itemSize)
                 item._puzzleLeftIndex = Math.round(itemLeft / itemSize)
 

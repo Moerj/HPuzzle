@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * HPuzzle  v0.1.0
+ * HPuzzle  v0.1.1
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -249,6 +249,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         var itemSize = parseInt(_this2.opts.size / _this2.row);
                         var itemTop = parseInt(item.style.top);
                         var itemLeft = parseInt(item.style.left);
+                        // 当前碎片的定位索引，用于计算出新尺寸的背景定位
                         item._puzzleTopIndex = Math.round(itemTop / itemSize);
                         item._puzzleLeftIndex = Math.round(itemLeft / itemSize);
 
