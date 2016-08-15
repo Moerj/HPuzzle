@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * HPuzzle  v0.1.2
+ * HPuzzle  v0.1.3
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -407,26 +407,29 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     this.puzzle = null;
                     return this;
                 }
+            }, {
+                key: 'init',
+                value: function init() {
+                    var _this3 = this;
+
+                    if (this.inited) {
+                        this.destory().create().random();
+                    } else {
+                        this.inited = true;
+                        this.create();
+                        setTimeout(function () {
+                            _this3.random();
+                        });
+                    }
+                    return this;
+                }
             }]);
 
             return Puzzle;
         }();
 
         window.Puzzle = function (opts) {
-            var p = new Puzzle(opts);
-            p.init = function () {
-                if (p.inited) {
-                    p.destory().create().random();
-                } else {
-                    p.inited = true;
-                    p.create();
-                    setTimeout(function () {
-                        p.random();
-                    });
-                }
-                return p;
-            };
-            return p;
+            return new Puzzle(opts);
         };
     })();
 }

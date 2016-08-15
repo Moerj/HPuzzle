@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.2
+ * HPuzzle  v0.1.3
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -237,7 +237,7 @@
                 let itemSize = parseInt(this.opts.size / this.row)
                 let itemTop = parseInt(item.style.top)
                 let itemLeft = parseInt(item.style.left)
-                // 当前碎片的定位索引，用于计算出新尺寸的背景定位
+                    // 当前碎片的定位索引，用于计算出新尺寸的背景定位
                 item._puzzleTopIndex = Math.round(itemTop / itemSize)
                 item._puzzleLeftIndex = Math.round(itemLeft / itemSize)
 
@@ -382,22 +382,21 @@
             this.puzzle = null
             return this
         }
+        init() {
+            if (this.inited) {
+                this.destory().create().random()
+            } else {
+                this.inited = true
+                this.create()
+                setTimeout(() => { this.random() })
+            }
+            return this
+        }
     }
 
 
     window.Puzzle = (opts) => {
-        let p = new Puzzle(opts)
-        p.init = () => {
-            if (p.inited) {
-                p.destory().create().random()
-            } else {
-                p.inited = true
-                p.create()
-                setTimeout(() => { p.random() })
-            }
-            return p
-        };
-        return p
+        return new Puzzle(opts)
     };
 
 
