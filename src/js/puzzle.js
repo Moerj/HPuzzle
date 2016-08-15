@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.1
+ * HPuzzle  v0.1.2
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -102,35 +102,35 @@
         }
         _isClear() { //是否通关
             for (let i = 0; i < this.items.length; i++) {
-                let item = this.items[i];
-                let top = parseInt(item.style.top)
-                let _top = parseInt(item._puzzleTop)
-                let left = parseInt(item.style.left)
-                let _left = parseInt(item._puzzleLeft)
-                let abs_top = Math.abs(top - _top)
-                let abs_left = Math.abs(left - _left)
-                if (abs_top > 2 || abs_left > 2) {
+                if (this.items[i]._puzzleCurrentIndex != this.items[i]._puzzleIndex) {
                     return false
                 }
             }
             return true
         }
-        _move(traget) { //绘制拼图改变
-            let sideDoms = this._getSideDoms(traget)
+        _move(target) { //绘制拼图改变
+            let sideDoms = this._getSideDoms(target)
             let blank
             let temp = {
-                top: parseInt(traget.style.top) + 'px',
-                left: parseInt(traget.style.left) + 'px'
+                top: parseInt(target.style.top) + 'px',
+                left: parseInt(target.style.left) + 'px'
             }
             for (let key in sideDoms) {
                 if (sideDoms[key].className == '') {
                     // 获取到空白块
                     blank = sideDoms[key]
-                        // 空白快和点击块交换位置
-                    traget.style.top = blank.style.top
-                    traget.style.left = blank.style.left
+
+                    // 空白快和点击块交换位置
+                    target.style.top = blank.style.top
+                    target.style.left = blank.style.left
                     blank.style.top = temp.top
                     blank.style.left = temp.left
+
+                    // 交换当前索引
+                    let tempCurr = target._puzzleCurrentIndex
+                    target._puzzleCurrentIndex = blank._puzzleCurrentIndex
+                    blank._puzzleCurrentIndex = tempCurr
+
                     break
                 }
             }
@@ -232,6 +232,7 @@
                 item._puzzleTop = item.style.top;
                 item._puzzleLeft = item.style.left;
                 item._puzzleIndex = index
+                item._puzzleCurrentIndex = index
 
                 let itemSize = parseInt(this.opts.size / this.row)
                 let itemTop = parseInt(item.style.top)

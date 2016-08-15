@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * HPuzzle  v0.1.1
+ * HPuzzle  v0.1.2
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -120,14 +120,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 value: function _isClear() {
                     //是否通关
                     for (var i = 0; i < this.items.length; i++) {
-                        var item = this.items[i];
-                        var _top2 = parseInt(item.style.top);
-                        var _top = parseInt(item._puzzleTop);
-                        var _left2 = parseInt(item.style.left);
-                        var _left = parseInt(item._puzzleLeft);
-                        var abs_top = Math.abs(_top2 - _top);
-                        var abs_left = Math.abs(_left2 - _left);
-                        if (abs_top > 2 || abs_left > 2) {
+                        if (this.items[i]._puzzleCurrentIndex != this.items[i]._puzzleIndex) {
                             return false;
                         }
                     }
@@ -135,23 +128,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 }
             }, {
                 key: '_move',
-                value: function _move(traget) {
+                value: function _move(target) {
                     //绘制拼图改变
-                    var sideDoms = this._getSideDoms(traget);
+                    var sideDoms = this._getSideDoms(target);
                     var blank = void 0;
                     var temp = {
-                        top: parseInt(traget.style.top) + 'px',
-                        left: parseInt(traget.style.left) + 'px'
+                        top: parseInt(target.style.top) + 'px',
+                        left: parseInt(target.style.left) + 'px'
                     };
                     for (var key in sideDoms) {
                         if (sideDoms[key].className == '') {
                             // 获取到空白块
                             blank = sideDoms[key];
+
                             // 空白快和点击块交换位置
-                            traget.style.top = blank.style.top;
-                            traget.style.left = blank.style.left;
+                            target.style.top = blank.style.top;
+                            target.style.left = blank.style.left;
                             blank.style.top = temp.top;
                             blank.style.left = temp.left;
+
+                            // 交换当前索引
+                            var tempCurr = target._puzzleCurrentIndex;
+                            target._puzzleCurrentIndex = blank._puzzleCurrentIndex;
+                            blank._puzzleCurrentIndex = tempCurr;
+
                             break;
                         }
                     }
@@ -245,6 +245,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         item._puzzleTop = item.style.top;
                         item._puzzleLeft = item.style.left;
                         item._puzzleIndex = index;
+                        item._puzzleCurrentIndex = index;
 
                         var itemSize = parseInt(_this2.opts.size / _this2.row);
                         var itemTop = parseInt(item.style.top);
