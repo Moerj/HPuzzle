@@ -121,7 +121,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     //是否通关
                     for (var i = 0; i < this.items.length; i++) {
                         var item = this.items[i];
-                        if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
+                        var _top2 = parseInt(item.style.top);
+                        var _top = parseInt(item._puzzleTop);
+                        var _left2 = parseInt(item.style.left);
+                        var _left = parseInt(item._puzzleLeft);
+                        var abs_top = Math.abs(_top2 - _top);
+                        var abs_left = Math.abs(_left2 - _left);
+                        if (abs_top > 2 || abs_left > 2) {
                             return false;
                         }
                     }
@@ -240,6 +246,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         item._puzzleLeft = item.style.left;
                         item._puzzleIndex = index;
 
+                        var itemSize = parseInt(_this2.opts.size / _this2.row);
+                        var itemTop = parseInt(item.style.top);
+                        var itemLeft = parseInt(item.style.left);
+                        item._puzzleTopIndex = Math.round(itemTop / itemSize);
+                        item._puzzleLeftIndex = Math.round(itemLeft / itemSize);
+
                         // 记录第一个空白块
                         if (index === 0) {
                             _this2.items.blank = item;
@@ -273,6 +285,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }, {
                 key: 'reSize',
                 value: function reSize(size) {
+                    if (!size) {
+                        size = this.opts.size;
+                    }
+
                     var oldSize = this.opts.size;
                     var oldItemSize = oldSize / this.row;
                     var newItemSize = size / this.row;
@@ -303,14 +319,20 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         var leftIndex = Math.round(left / oldItemSize);
                         var newTop = newItemSize * topIndex;
                         var newLeft = newItemSize * leftIndex;
+                        var newPosTop = newItemSize * item._puzzleTopIndex;
+                        var newPosLeft = newItemSize * item._puzzleLeftIndex;
                         $item.css({
                             width: newItemSize,
                             height: newItemSize,
                             top: newTop,
                             left: newLeft,
                             backgroundSize: newBackgroundSize,
-                            backgroundPosition: '-' + newTop + 'px -' + newLeft + 'px'
+                            backgroundPosition: '-' + newPosLeft + 'px -' + newPosTop + 'px'
                         });
+
+                        // 从新记录定位,在通关判断用调用
+                        item._puzzleLeft = item.style.left;
+                        item._puzzleTop = item.style.top;
                     });
 
                     return this;

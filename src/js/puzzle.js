@@ -103,7 +103,13 @@
         _isClear() { //是否通关
             for (let i = 0; i < this.items.length; i++) {
                 let item = this.items[i];
-                if (item._puzzleTop != item.style.top || item._puzzleLeft != item.style.left) {
+                let top = parseInt(item.style.top)
+                let _top = parseInt(item._puzzleTop)
+                let left = parseInt(item.style.left)
+                let _left = parseInt(item._puzzleLeft)
+                let abs_top = Math.abs(top - _top)
+                let abs_left = Math.abs(left - _left)
+                if (abs_top > 2 || abs_left > 2) {
                     return false
                 }
             }
@@ -227,6 +233,12 @@
                 item._puzzleLeft = item.style.left;
                 item._puzzleIndex = index
 
+                let itemSize = parseInt(this.opts.size / this.row)
+                let itemTop = parseInt(item.style.top)
+                let itemLeft = parseInt(item.style.left)
+                item._puzzleTopIndex = Math.round(itemTop / itemSize)
+                item._puzzleLeftIndex = Math.round(itemLeft / itemSize)
+
                 // 记录第一个空白块
                 if (index === 0) {
                     this.items.blank = item
@@ -260,6 +272,10 @@
             return this
         }
         reSize(size) {
+            if (!size) {
+                size = this.opts.size
+            }
+
             let oldSize = this.opts.size
             let oldItemSize = oldSize / this.row
             let newItemSize = size / this.row
@@ -290,14 +306,20 @@
                 let leftIndex = Math.round(left / oldItemSize)
                 let newTop = newItemSize * topIndex
                 let newLeft = newItemSize * leftIndex
+                let newPosTop = newItemSize * item._puzzleTopIndex
+                let newPosLeft = newItemSize * item._puzzleLeftIndex
                 $item.css({
                     width: newItemSize,
                     height: newItemSize,
                     top: newTop,
                     left: newLeft,
                     backgroundSize: newBackgroundSize,
-                    backgroundPosition: `-${newTop}px -${newLeft}px`
+                    backgroundPosition: `-${newPosLeft}px -${newPosTop}px`
                 })
+
+                // 从新记录定位,在通关判断用调用
+                item._puzzleLeft = item.style.left
+                item._puzzleTop = item.style.top
             })
 
             return this
