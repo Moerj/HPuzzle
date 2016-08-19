@@ -273,6 +273,17 @@
 
             return this
         }
+        replaceImg(newImg) {
+            $(this.simpleImg).remove()
+            if (typeof newImg == 'string') {
+                this.simpleImg = $(`<img src="${newImg}">`)[0]
+                this.opts.imgUrl = newImg
+            } else {
+                this.simpleImg = newImg
+                this.opts.imgUrl = newImg.src
+            }
+            this.init()
+        }
         reSize(size) {
             if (!size) {
                 size = this.opts.size

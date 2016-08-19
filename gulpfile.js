@@ -85,7 +85,7 @@ gulp.task('default', [], function() {
 
         // 动态根路径
         server: {
-            baseDir: "./",
+            baseDir: "./dist/",
             index: "index.html"
         },
 
