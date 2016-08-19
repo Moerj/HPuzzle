@@ -285,6 +285,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return this;
                 }
             }, {
+                key: 'replaceImg',
+                value: function replaceImg(newImg) {
+                    $(this.simpleImg).remove();
+                    if (typeof newImg == 'string') {
+                        this.simpleImg = $('<img src="' + newImg + '">')[0];
+                        this.opts.imgUrl = newImg;
+                    } else {
+                        this.simpleImg = newImg;
+                        this.opts.imgUrl = newImg.src;
+                    }
+                    this.init();
+                }
+            }, {
                 key: 'reSize',
                 value: function reSize(size) {
                     if (!size) {
