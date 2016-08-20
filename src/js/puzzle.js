@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.3
+ * HPuzzle  v0.1.4
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
