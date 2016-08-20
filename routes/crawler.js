@@ -1,10 +1,9 @@
-var http = require('http')
 var https = require('https')
 var cheerio = require('cheerio')
 var request = require('request')
 var fs = require('fs');
 var host = 'https://yande.re'
-var url = host + '/post?tags=order%3Arandom'; //zealer首页
+var pageUrl = host + '/post?tags=order%3Arandom';
 
 function GetRandomNum(Min, Max) {
     var Range = Max - Min;
@@ -15,11 +14,11 @@ function GetRandomNum(Min, Max) {
 
 module.exports = function(app) {
     app.get('/yande.re', function(crawler_req, crawler_res) {
-        console.log('开始抓取 ' + url + ' 的数据')
+        console.log('开始抓取 ' + pageUrl + ' 的数据')
 
         new Promise(function(resolve, reject) {
             // 筛选所有 html，获取有效的图片数据
-            https.get(url, function(res) {
+            https.get(pageUrl, function(res) {
                 var html = '';
                 res.on('data', function(data) {
                     html += data;
@@ -36,7 +35,7 @@ module.exports = function(app) {
                     resolve(data);
                 })
             }).on('error', function(e) {
-                throw new Error(e);
+                console.log(e);
             })
 
         }).then(function(data) {
@@ -47,7 +46,7 @@ module.exports = function(app) {
 
         }).then(function(url) {
             // 对抽取的数据进一步处理，进入该数据的单独连接中，去除原图的 url
-            console.log('正在处理数据...\n', url);
+            console.log('正在处理数据...');
 
             return new Promise(function(resolve, reject) {
                 https.get(url, function(res) {
@@ -59,23 +58,25 @@ module.exports = function(app) {
                         var $ = cheerio.load(html);
                         var img = $('#image');
                         var imgurl = img.attr('src');
-                        console.log('postImg完毕！\n', imgurl)
+                        console.log('数据处理完毕，得到目标图片：\n', imgurl)
                         resolve(imgurl);
                     })
                 }).on('error', function(e) {
-                    throw new Error(e);
+                    console.log(e);
                 })
             })
 
         }).then(function(url) {
-            console.log('准备下载图片：\n', url);
-            var dir = './dist/images/tempimg.jpg';
-            var writeStream = fs.createWriteStream(dir);
+            console.log('正在下载图片...');
+            var dir = './dist/images/temp/';
+            var type = url.substring(url.length-4)
+            var filename = Date.parse(new Date()) + type
+            var writeStream = fs.createWriteStream(dir + filename);
 
             request(url).pipe(writeStream);
 
             writeStream.on('finish', function() { // 写完后，继续读取
-                crawler_res.end('images/tempimg.jpg');
+                crawler_res.end(filename);
                 console.log('图片下载完成。');
             });
 

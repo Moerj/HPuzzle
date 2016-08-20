@@ -81,13 +81,16 @@ gulp.task('default', [], function() {
         ],
 
         // 启动端口
-        port: 6888,
+        // port: 6888,
+
+        // 动态 node
+        proxy: "localhost:6888",
 
         // 动态根路径
-        server: {
-            baseDir: "./dist/",
-            index: "index.html"
-        },
+        // server: {
+        //     baseDir: "./dist/",
+        //     index: "index.html"
+        // },
 
         // 静态化的路径
         // serveStatic: ['./demos/']

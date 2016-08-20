@@ -56,9 +56,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 // 胜利音效
                 this.clearSound = $('<audio src="' + this.opts.clearSound + '" preload></audio>')[0];
 
-                // 图片实例
-                this.simpleImg = $('<img src="' + this.opts.imgUrl + '">')[0];
-
                 // 键盘事件
                 if (!window.Puzzle._isKeyDownEventBind) {
                     window.Puzzle._isKeyDownEventBind = true;
@@ -189,6 +186,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         throw new Error('this puzzle has already created. if you want to create again, do destory it first.');
                     }
 
+                    // 图片实例
+                    var $img = $('<img src="' + this.opts.imgUrl + '">');
+                    this.simpleImg = $img[0];
+
+                    // 每次创建后并不能立即获取图片实例的尺寸，因此需要异步再重置一次尺寸
+                    $img.load(function () {
+                        _this2.reSize();
+                    });
+
                     var puzzleString = '';
                     var fragment = this.fragment;
                     var row = this.row;
@@ -196,8 +202,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     var top = 0;
                     var left = 0;
                     var leftIndex = 1;
-                    var simpleImgWidth = this.simpleImg.width;
-                    var simpleImgHeight = this.simpleImg.height;
+                    var simpleImgWidth = this.simpleImg.naturalWidth;
+                    var simpleImgHeight = this.simpleImg.naturalHeight;
 
                     for (var i = 0; i < fragment; i++) {
                         var className = '';
@@ -289,10 +295,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 value: function replaceImg(newImg) {
                     $(this.simpleImg).remove();
                     if (typeof newImg == 'string') {
-                        this.simpleImg = $('<img src="' + newImg + '">')[0];
                         this.opts.imgUrl = newImg;
                     } else {
-                        this.simpleImg = newImg;
                         this.opts.imgUrl = newImg.src;
                     }
                     this.init();

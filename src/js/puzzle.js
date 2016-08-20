@@ -46,8 +46,6 @@
             // 胜利音效
             this.clearSound = $(`<audio src="${this.opts.clearSound}" preload></audio>`)[0]
 
-            // 图片实例
-            this.simpleImg = $(`<img src="${this.opts.imgUrl}">`)[0]
 
             // 键盘事件
             if (!window.Puzzle._isKeyDownEventBind) {
@@ -161,6 +159,15 @@
                 throw new Error('this puzzle has already created. if you want to create again, do destory it first.')
             }
 
+            // 图片实例
+            let $img = $(`<img src="${this.opts.imgUrl}">`)
+            this.simpleImg = $img[0]
+
+            // 每次创建后并不能立即获取图片实例的尺寸，因此需要异步再重置一次尺寸
+            $img.load(() => {
+                this.reSize()
+            })
+
             let puzzleString = ''
             let fragment = this.fragment
             let row = this.row
@@ -168,8 +175,8 @@
             let top = 0
             let left = 0
             let leftIndex = 1
-            let simpleImgWidth = this.simpleImg.width
-            let simpleImgHeight = this.simpleImg.height
+            let simpleImgWidth = this.simpleImg.naturalWidth
+            let simpleImgHeight = this.simpleImg.naturalHeight
 
             for (let i = 0; i < fragment; i++) {
                 let className = ''
@@ -268,7 +275,6 @@
                 return false
             })
 
-
             this.opts.contanier.append(this.puzzle)
 
             return this
@@ -276,10 +282,8 @@
         replaceImg(newImg) {
             $(this.simpleImg).remove()
             if (typeof newImg == 'string') {
-                this.simpleImg = $(`<img src="${newImg}">`)[0]
                 this.opts.imgUrl = newImg
             } else {
-                this.simpleImg = newImg
                 this.opts.imgUrl = newImg.src
             }
             this.init()

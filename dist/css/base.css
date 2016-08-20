@@ -9,3 +9,6 @@ body {
 #setLevel {
   display: inline-block;
   width: 300px; }
+
+#simple {
+  cursor: pointer; }
