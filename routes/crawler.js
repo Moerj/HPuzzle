@@ -69,19 +69,15 @@ module.exports = function(app) {
 
         }).then(function(url) {
             console.log('准备下载图片：\n', url);
-            // var req = request(url).pipe(fs.createWriteStream('./dist/images/tempimg.jpg'));
+            var dir = './dist/images/tempimg.jpg';
+            var writeStream = fs.createWriteStream(dir);
 
-            request(url, function(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    request.head(url, function(err, res, body) {
-                        request(url).pipe(fs.createWriteStream('./dist/images/tempimg.jpg'))
-                    });
-                }
+            request(url).pipe(writeStream);
+
+            writeStream.on('finish', function() { // 写完后，继续读取
+                crawler_res.end('images/tempimg.jpg');
+                console.log('图片下载完成。');
             });
-
-            console.log('下载完成，已发送至前台页面。');
-            crawler_res.send({ status: 'ok', src: 'images/tempimg.jpg' });
-            // crawler_res.end();
 
         })
 

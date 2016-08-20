@@ -28,7 +28,7 @@ $(function() {
         url: "/yande.re"
     }).done(function(res) {
         console.log('yande.re爬虫数据：\n', res);
-        puzzle.replaceImg(res.src)
+        puzzle.replaceImg(res)
         $('#simple').attr('src', puzzle.opts.imgUrl)
     })
 
