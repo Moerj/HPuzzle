@@ -3,6 +3,11 @@
 FastClick.attach(document.body);
 
 $(function () {
+    var $mask = $('#mask');
+    var $contrl = $('#contrl');
+    var $setLevel = $('#setLevel');
+    var $simple = $('#simple');
+
     // 配置拼图
     var puzzle = Puzzle({
         imgUrl: 'images/img1.jpg',
@@ -14,7 +19,7 @@ $(function () {
     }).init();
 
     // 设置等级
-    $('#setLevel').on('change', function () {
+    $setLevel.on('change', function () {
         puzzle.setLevel($(this).val());
     });
 
@@ -27,14 +32,11 @@ $(function () {
         }, 300);
     });
 
-    // 创建蒙层
-    var mask = $('<div class="mask">\n        <div class="tost">正在从某网站拔污图,请耐心等待...</div>\n        </div>').appendTo('body').hide();
-
     // 随机一张图片
-    $('#simple').click(function () {
+    $simple.click(function () {
         console.log('正在随机加载图片...');
-        mask.show();
-        $('body').css({ overflow: 'hidden' });
+        $mask.show();
+        $contrl.css({ overflow: 'hidden' });
 
         // 爬虫
         $.ajax({
@@ -47,8 +49,8 @@ $(function () {
             $('#simple').attr('src', imgUrl);
             puzzle.replaceImg(imgUrl);
         }).always(function () {
-            mask.hide();
-            $('body').css({ overflow: '' });
+            $mask.hide();
+            $contrl.css({ overflow: 'auto' });
         });
     });
 });
