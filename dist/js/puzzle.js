@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * HPuzzle  v0.1.4
+ * HPuzzle  v0.1.5
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -40,6 +40,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 if (opts.level < 1) {
                     opts.level = 1;
                 }
+
+                // 状态容器
+                this.status = {};
 
                 // 拼图行数
                 this.row = opts.level + 2;
@@ -126,7 +129,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }, {
                 key: '_move',
                 value: function _move(target) {
+                    var _this2 = this;
+
                     //绘制拼图改变
+                    if (this.status.clear) {
+                        // 已拼完状态不再执行
+                        return;
+                    }
+
                     var sideDoms = this._getSideDoms(target);
                     var blank = void 0;
                     var temp = {
@@ -153,6 +163,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         }
                     }
                     this.clickSound.play();
+
+                    // 判断是否通关
+                    var timer = target._puzzleTimer;
+                    if (timer) {
+                        clearTimeout(timer);
+                    }
+                    timer = setTimeout(function () {
+                        if (_this2._isClear()) _this2.clearance();
+                    }, 310);
                 }
             }, {
                 key: '_keyDown',
@@ -179,12 +198,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }, {
                 key: 'create',
                 value: function create() {
-                    var _this2 = this;
+                    var _this3 = this;
 
                     //创建结构
                     if (this.puzzle) {
                         throw new Error('this puzzle has already created. if you want to create again, do destory it first.');
                     }
+
+                    // 设置状态
+                    this.status.clear = false;
 
                     // 图片实例
                     var $img = $('<img src="' + this.opts.imgUrl + '">');
@@ -192,7 +214,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     // 每次创建后并不能立即获取图片实例的尺寸，因此需要异步再重置一次尺寸
                     $img.load(function () {
-                        _this2.reSize();
+                        _this3.reSize();
                     });
 
                     var puzzleString = '';
@@ -253,7 +275,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                         item._puzzleIndex = index;
                         item._puzzleCurrentIndex = index;
 
-                        var itemSize = parseInt(_this2.opts.size / _this2.row);
+                        var itemSize = parseInt(_this3.opts.size / _this3.row);
                         var itemTop = parseInt(item.style.top);
                         var itemLeft = parseInt(item.style.left);
                         // 当前碎片的定位索引，用于计算出新尺寸的背景定位
@@ -262,27 +284,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                         // 记录第一个空白块
                         if (index === 0) {
-                            _this2.items.blank = item;
+                            _this3.items.blank = item;
                         }
                         // 记录每个碎片当前位置的定位
-                        _this2.positionArry[index] = { left: item.style.left, top: item.style.top };
+                        _this3.positionArry[index] = { left: item.style.left, top: item.style.top };
                     });
 
                     // 移动碎片事件
                     $puzzle.on('click', '.fragment', function (e) {
-                        var target = e.target;
-                        var timer = target._puzzleTimer;
-
-                        // 判断是否通关
-                        if (timer) {
-                            clearTimeout(timer);
-                        }
-                        timer = setTimeout(function () {
-                            if (_this2._isClear()) _this2.clearance();
-                        }, 310);
-
                         // 更新渲染拼图
-                        _this2._move(target);
+                        _this3._move(e.target);
                         return false;
                     });
 
@@ -412,6 +423,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 key: 'clearance',
                 value: function clearance() {
                     //触发胜利
+                    this.status.clear = true;
                     this.items.hide();
                     $(this.puzzle).css({ background: 'url(' + this.opts.imgUrl + ')', backgroundSize: 'cover' });
                     this.clearSound.play();
@@ -427,15 +439,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             }, {
                 key: 'init',
                 value: function init() {
-                    var _this3 = this;
+                    var _this4 = this;
 
-                    if (this.inited) {
+                    if (this.status.inited) {
                         this.destory().create().random();
                     } else {
-                        this.inited = true;
+                        this.status.inited = true;
                         this.create();
                         setTimeout(function () {
-                            _this3.random();
+                            _this4.random();
                         });
                     }
                     return this;

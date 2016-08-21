@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.4
+ * HPuzzle  v0.1.5
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -30,6 +30,9 @@
             if (opts.level < 1) {
                 opts.level = 1
             }
+
+            // 状态容器
+            this.status = {}
 
             // 拼图行数
             this.row = opts.level + 2
@@ -107,6 +110,11 @@
             return true
         }
         _move(target) { //绘制拼图改变
+            if (this.status.clear) {
+                // 已拼完状态不再执行
+                return
+            }
+
             let sideDoms = this._getSideDoms(target)
             let blank
             let temp = {
@@ -133,6 +141,15 @@
                 }
             }
             this.clickSound.play()
+
+            // 判断是否通关
+            let timer = target._puzzleTimer
+            if (timer) {
+                clearTimeout(timer)
+            }
+            timer = setTimeout(() => {
+                if (this._isClear()) this.clearance()
+            }, 310)
         }
         _keyDown(event) {
             let sideDoms = this._getSideDoms(this.items.blank)
@@ -158,6 +175,9 @@
             if (this.puzzle) {
                 throw new Error('this puzzle has already created. if you want to create again, do destory it first.')
             }
+
+            // 设置状态
+            this.status.clear = false
 
             // 图片实例
             let $img = $(`<img src="${this.opts.imgUrl}">`)
@@ -259,19 +279,8 @@
 
             // 移动碎片事件
             $puzzle.on('click', '.fragment', (e) => {
-                let target = e.target
-                let timer = target._puzzleTimer
-
-                // 判断是否通关
-                if (timer) {
-                    clearTimeout(timer)
-                }
-                timer = setTimeout(() => {
-                    if (this._isClear()) this.clearance()
-                }, 310)
-
                 // 更新渲染拼图
-                this._move(target)
+                this._move(e.target)
                 return false
             })
 
@@ -387,6 +396,7 @@
             return this
         }
         clearance() { //触发胜利
+            this.status.clear = true
             this.items.hide()
             $(this.puzzle).css({ background: `url(${this.opts.imgUrl})`, backgroundSize: 'cover' })
             this.clearSound.play()
@@ -398,12 +408,12 @@
             return this
         }
         init() {
-            if (this.inited) {
+            if (this.status.inited) {
                 this.destory().create().random()
             } else {
-                this.inited = true
+                this.status.inited = true
                 this.create()
-                setTimeout(() => { this.random() })
+                    setTimeout(() => { this.random() })
             }
             return this
         }

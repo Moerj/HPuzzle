@@ -42,8 +42,7 @@ $(function() {
         // 爬虫
         $.ajax({
             type: "GET",
-            url: "/yande.re",
-            // timeout: 15000
+            url: "/yande.re"
         }).done(function(res) {
             let dir = 'images/temp/'
             let imgUrl = dir + res
