@@ -13,6 +13,18 @@ function GetRandomNum(Min, Max) {
 
 
 module.exports = function(app) {
+    var imgPath = './dist/images/temp/';
+
+    /* 清空零时文件夹所有图片 */
+
+    var dirList = fs.readdirSync(imgPath);
+
+    dirList.forEach(function (fileName) {
+        fs.unlinkSync(imgPath + fileName);
+    });
+
+
+    // 请求网络图片
     app.get('/yande.re', function(crawler_req, crawler_res) {
         console.log('开始抓取 ' + pageUrl + ' 的数据')
 
@@ -68,10 +80,9 @@ module.exports = function(app) {
 
         }).then(function(url) {
             console.log('正在下载图片...');
-            var dir = './dist/images/temp/';
             var type = url.substring(url.length-4)
             var filename = Date.parse(new Date()) + type
-            var writeStream = fs.createWriteStream(dir + filename);
+            var writeStream = fs.createWriteStream(imgPath + filename);
 
             request(url).pipe(writeStream);
 
