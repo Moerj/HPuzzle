@@ -28,7 +28,7 @@ module.exports = function(app) {
     app.get('/yande.re', function(crawler_req, crawler_res) {
         console.log('开始抓取 ' + pageUrl + ' 的数据')
 
-        new Promise(function(resolve, reject) {
+        new Promise(function(resolve) {
             // 筛选所有 html，获取有效的图片数据
             https.get(pageUrl, function(res) {
                 var html = '';
@@ -60,7 +60,7 @@ module.exports = function(app) {
             // 对抽取的数据进一步处理，进入该数据的单独连接中，去除原图的 url
             console.log('正在处理数据...');
 
-            return new Promise(function(resolve, reject) {
+            return new Promise(function(resolve) {
                 https.get(url, function(res) {
                     var html = '';
                     res.on('data', function(data) {
