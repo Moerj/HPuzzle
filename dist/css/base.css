@@ -1,6 +1,8 @@
-body {
+html, body {
   background-color: #f5f4f4;
-  width: 100%; }
+  width: 100%;
+  height: 100%;
+  font-size: 16px; }
 
 .contrl {
   margin-bottom: 20px;
@@ -12,3 +14,42 @@ body {
 
 #simple {
   cursor: pointer; }
+
+.mask {
+  width: 100%;
+  height: 100%;
+  z-index: 99999;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 0;
+  left: 0; }
+  .mask .tost {
+    display: block;
+    width: 100%;
+    text-align: center;
+    height: 150px;
+    position: absolute;
+    top: 50%;
+    margin-top: -75px;
+    color: #fff;
+    font-size: 1.2rem;
+    -webkit-transition: 1s;
+    transition: 1s;
+    -webkit-animation: tost 5s infinite alternate;
+    animation: tost 5s infinite alternate; }
+
+@-webkit-keyframes tost {
+  from {
+    -webkit-transform: translate3d(0, 100px, 0);
+    transform: translate3d(0, 100px, 0); }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0); } }
+
+@keyframes tost {
+  from {
+    -webkit-transform: translate3d(0, 100px, 0);
+    transform: translate3d(0, 100px, 0); }
+  to {
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0); } }
