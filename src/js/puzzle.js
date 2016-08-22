@@ -1,5 +1,5 @@
 /**
- * HPuzzle  v0.1.5
+ * HPuzzle  v0.1.6
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -185,7 +185,7 @@
 
             // 每次创建后并不能立即获取图片实例的尺寸，因此需要异步再重置一次尺寸
             $img.load(() => {
-                this.reSize()
+                this.resize()
             })
 
             let puzzleString = ''
@@ -288,7 +288,7 @@
 
             return this
         }
-        replaceImg(newImg) {
+        replace(newImg) {
             $(this.simpleImg).remove()
             if (typeof newImg == 'string') {
                 this.opts.imgUrl = newImg
@@ -297,7 +297,7 @@
             }
             this.init()
         }
-        reSize(size) {
+        resize(size) {
             if (!size) {
                 size = this.opts.size
             }

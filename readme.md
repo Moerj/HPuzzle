@@ -40,14 +40,11 @@ var puzzle = Puzzle({
 
 ## API  
 
-### create()
-创建拼图
+### init()
+创建并打乱拼图，相当于puzzle._create().random()，再次调用则会重新随机初始化拼图
 
 ### random()
-随机排序拼图
-
-### init()
-创建并随机排序，相当于puzzle.create().random()，再次调用则会重新随机初始化拼图
+随机打乱拼图
 
 ### destory()
 销毁创建的拼图
@@ -55,5 +52,8 @@ var puzzle = Puzzle({
 ### setLevel(num)
 设置拼图等级，num整数，且必须大于1
 
-### reSize(num)
+### resize(num)
 重置拼图大小，num单位为只支持px，传入时可以省略单位
+
+### replace(imgUrl)
+替换拼图的图片

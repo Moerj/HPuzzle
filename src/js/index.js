@@ -27,7 +27,7 @@ $(function() {
     $(window).resize(function() {
         clearTimeout(t)
         t = setTimeout(function() {
-            puzzle.reSize($('body').width())
+            puzzle.resize($('body').width())
         }, 300)
     });
 
@@ -46,7 +46,7 @@ $(function() {
             let imgUrl = dir + res
             console.log('yande.re爬虫数据：\n', imgUrl);
             $('#simple').attr('src', imgUrl)
-            puzzle.replaceImg(imgUrl)
+            puzzle.replace(imgUrl)
         }).always(function() {
             $mask.hide();
             $contrl.css({ overflow: 'auto' })

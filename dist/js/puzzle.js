@@ -5,7 +5,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 /**
- * HPuzzle  v0.1.5
+ * HPuzzle  v0.1.6
  * @license MIT
  * Designed and built by Moer
  * Demo     https://moerj.github.io/HPuzzle/
@@ -214,7 +214,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
                     // 每次创建后并不能立即获取图片实例的尺寸，因此需要异步再重置一次尺寸
                     $img.load(function () {
-                        _this3.reSize();
+                        _this3.resize();
                     });
 
                     var puzzleString = '';
@@ -302,8 +302,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     return this;
                 }
             }, {
-                key: 'replaceImg',
-                value: function replaceImg(newImg) {
+                key: 'replace',
+                value: function replace(newImg) {
                     $(this.simpleImg).remove();
                     if (typeof newImg == 'string') {
                         this.opts.imgUrl = newImg;
@@ -313,8 +313,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     this.init();
                 }
             }, {
-                key: 'reSize',
-                value: function reSize(size) {
+                key: 'resize',
+                value: function resize(size) {
                     if (!size) {
                         size = this.opts.size;
                     }
