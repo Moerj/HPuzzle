@@ -3,10 +3,12 @@
 FastClick.attach(document.body);
 
 $(function () {
+    var $win = $(window);
     var $mask = $('#mask');
     var $contrl = $('#contrl');
     var $setLevel = $('#setLevel');
     var $simple = $('#simple');
+    var $contanier = $('#contanier');
 
     // 配置拼图
     var puzzle = Puzzle({
@@ -24,11 +26,27 @@ $(function () {
     });
 
     // 窗口改变重置尺寸
+    function resizeWin() {
+        if ($win.width() > $win.height()) {
+            $contrl.css({ position: 'absolute', top: 60, left: 20 });
+            $setLevel.css({ position: 'absolute', top: 20, left: 20 });
+            $contanier.css({ position: 'absolute', top: 20, left: 350 });
+            puzzle.resize($win.height() - 30);
+        } else {
+            $contrl.css({ position: 'relative', top: 0, left: 0 });
+            $setLevel.css({ position: 'relative', top: 0, left: 0 });
+            $contanier.css({ position: 'relative', top: 0, left: 0 });
+            puzzle.resize($('body').width());
+        }
+    }
+    setTimeout(function () {
+        resizeWin();
+    });
     var t = void 0;
-    $(window).resize(function () {
+    $win.resize(function () {
         clearTimeout(t);
         t = setTimeout(function () {
-            puzzle.resize($('body').width());
+            resizeWin();
         }, 300);
     });
 

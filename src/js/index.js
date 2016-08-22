@@ -1,10 +1,12 @@
 FastClick.attach(document.body);
 
 $(function() {
+    let $win = $(window)
     let $mask = $('#mask')
     let $contrl = $('#contrl')
     let $setLevel = $('#setLevel')
     let $simple = $('#simple')
+    let $contanier = $('#contanier')
 
     // 配置拼图
     let puzzle = Puzzle({
@@ -23,11 +25,27 @@ $(function() {
     })
 
     // 窗口改变重置尺寸
+    function resizeWin() {
+        if ($win.width() > $win.height()) {
+            $contrl.css({ position: 'absolute', top: 60, left: 20 })
+            $setLevel.css({ position: 'absolute', top: 20, left: 20 })
+            $contanier.css({ position: 'absolute', top: 20, left: 350 })
+            puzzle.resize($win.height() - 30)
+        } else {
+            $contrl.css({ position: 'relative', top: 0, left: 0 })
+            $setLevel.css({ position: 'relative', top: 0, left: 0 })
+            $contanier.css({ position: 'relative', top: 0, left: 0 })
+            puzzle.resize($('body').width())
+        }
+    }
+    setTimeout(() => {
+        resizeWin()
+    })
     let t
-    $(window).resize(function() {
+    $win.resize(function() {
         clearTimeout(t)
         t = setTimeout(function() {
-            puzzle.resize($('body').width())
+            resizeWin()
         }, 300)
     });
 
@@ -35,7 +53,7 @@ $(function() {
     $simple.click(function() {
         console.log('正在随机加载图片...');
         $mask.show()
-        $contrl.css({overflow:'hidden'})
+        $contrl.css({ overflow: 'hidden' })
 
         // 爬虫
         $.ajax({
