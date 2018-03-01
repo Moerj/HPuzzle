@@ -12,7 +12,7 @@ $(function () {
 
     // 配置拼图
     var puzzle = Puzzle({
-        imgUrl: 'images/img1.jpg',
+        imgUrl: 'images/img0.jpg',
         contanier: '#contanier',
         size: $('body').width(),
         level: 1, //设置游戏难度，整数，必须大于1
