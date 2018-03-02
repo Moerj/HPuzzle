@@ -15,11 +15,33 @@ body {
   #contrl > * {
     width: 100%; }
 
-#setLevel {
-  display: block;
+.tool {
   width: 300px;
-  margin: 0 auto;
-  margin-bottom: 20px; }
+  margin-top: 10px; }
+  @media screen and (min-width: 800px) {
+    .tool {
+      margin-left: 20px; } }
+  @media screen and (max-width: 800px) {
+    .tool {
+      margin: 0 auto; } }
+  .tool .btn-group {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex; }
+    .tool .btn-group > * {
+      width: 50%;
+      position: relative; }
+      .tool .btn-group > * .imgfile {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        opacity: 0; }
+  .tool #setLevel {
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px; }
 
 #simple {
   cursor: pointer; }

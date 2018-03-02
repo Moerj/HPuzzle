@@ -46,12 +46,11 @@ gulp.task('sass', function() {
         }));
 });
 
-gulp.task('js-es2015', function() {
-    // 编译js-es6
+gulp.task('js', function() {
     return gulp.src(jsSrc)
-        .pipe(babel({
-            presets: ['es2015']
-        }))
+        // .pipe(babel({
+        //     presets: ['es2015']
+        // }))
         .pipe(gulp.dest('dist/js'))
 })
 
@@ -100,6 +99,6 @@ gulp.task('default', [], function() {
 
     // 文件改变，自动执行编译或打包的任务
     gulp.watch(sassSrc, ['sass'])
-    gulp.watch(jsSrc, ['js-es2015'])
+    gulp.watch(jsSrc, ['js'])
 
 });

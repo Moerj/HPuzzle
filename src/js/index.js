@@ -27,13 +27,11 @@ $(function() {
     // 窗口改变重置尺寸
     function resizeWin() {
         if ($win.width() > $win.height()) {
-            $contrl.css({ position: 'absolute', top: 60, left: 20 })
-            $setLevel.css({ position: 'absolute', top: 20, left: 20 })
+            $contrl.css({ position: 'absolute', top: 80, left: 20 })
             $contanier.css({ position: 'absolute', top: 20, left: 350 })
             puzzle.resize($win.height() - 30)
         } else {
             $contrl.css({ position: 'relative', top: 0, left: 0 })
-            $setLevel.css({ position: 'relative', top: 0, left: 0 })
             $contanier.css({ position: 'relative', top: 0, left: 0 })
             puzzle.resize($('body').width())
         }
@@ -50,8 +48,8 @@ $(function() {
     });
 
     // 随机一张图片
-    $simple.click(function() {
-        console.log('正在随机加载图片...');
+    $('.btn.network').click(function() {  
+        console.log('正在随机加载图片...')
         $mask.show()
         $contrl.css({ overflow: 'hidden' })
 
@@ -63,12 +61,20 @@ $(function() {
             let dir = 'images/temp/'
             let imgUrl = dir + res
             console.log('yande.re爬虫数据：\n', imgUrl);
-            $('#simple').attr('src', imgUrl)
+            $simple.attr('src', imgUrl)
             puzzle.replace(imgUrl)
         }).always(function() {
             $mask.hide();
             $contrl.css({ overflow: 'auto' })
         })
+    })
+
+    // 取本地图片
+    $('.imgfile').change(function(e){
+        var file = e.target.files[0]
+        var imgUrl = window.URL.createObjectURL(file)
+        $simple.attr('src', imgUrl)
+        puzzle.replace(imgUrl)
     })
 
 

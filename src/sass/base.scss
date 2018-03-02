@@ -13,16 +13,39 @@ body {
     margin: 0 auto;
     text-align: center;
     overflow: auto;
-    >* {
+    >* { 
         width: 100%;
     }
 }
-
-#setLevel {
-    display: block;
+.tool{
     width: 300px;
-    margin: 0 auto;
-    margin-bottom: 20px;
+    @media screen and (min-width: 800px) {// pc
+        margin-left: 20px;
+    }
+    @media screen and (max-width: 800px) {// 手机
+        margin: 0 auto;
+    }
+    margin-top: 10px;
+    .btn-group{
+        display: flex;
+        >*{
+            width: 50%;
+            position: relative;
+            .imgfile{
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                left: 0;
+                opacity: 0;
+            }
+        }
+    }
+    #setLevel {
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 20px;
+    }
 }
 
 #simple {

@@ -10,9 +10,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 /* start http server */
 var server = app.listen(6888, function() {
-    var host = server.address().address
+    // var host = server.address().address
     var port = server.address().port
-    console.log("应用实例，访问地址为 http://%s:%s", host, port)
+    console.log("应用实例，访问地址为 http://localhost:"+port )
 });
 
 require('./routes/crawler')(app)
