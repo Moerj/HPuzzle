@@ -19,23 +19,14 @@ var puzzle = Puzzle({
 
 ## Option  
 
-### imgUrl
-指定拼图的图片路径
-
-### contanier
-将拼图放入指定的 dom 元素，可以传入 id 或者是 dom 对象
-
-### size
-定义拼图大小，单位计算为 px
-
-### level
-游戏难度 1~3
-
-### clickSound
-点击音效
-
-### clearSound
-胜利音效
+参数名      | 类型         | 功能                          | 默认值
+------------|--------------|-------------------------------|------
+imgUrl      | String       | 指定拼图的图片路径            |
+contanier   | id/DomObj    | 将拼图放入指定的 dom 元素     | body
+size        | String       | 定义拼图大小，单位计算为 px   | 600
+level       | Number       | 游戏难度 1~3                  | 1
+clickSound  | String       | 点击音效路径                  |
+clearSound  | String       | 胜利音效路径                  |
 
 
 ## API  
